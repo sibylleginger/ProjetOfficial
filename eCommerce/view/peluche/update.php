@@ -11,7 +11,7 @@
 
         <p>
             <label for="couleur">Couleur</label> :
-            <input type="text" value=<?php $couleur = $p->couleur; echo $couleur; ?> name="couleur" id="couleur" readonly />
+            <input type="text" value=<?php $couleur = $p->getCouleur(); echo $couleur; ?> name="couleur" id="couleur" readonly />
         </p>
 
         <p>

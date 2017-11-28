@@ -1,6 +1,5 @@
-
 <?php
-require_once File::build_path(array('config', 'Conf.php'));
+require_once File::build_path(array('config', 'conf.php'));
 
 class ModelUtilisateur extends Model{
 
@@ -40,7 +39,7 @@ class ModelUtilisateur extends Model{
 
   public static function getAllUtilisateurs() {
     try {
-      $requeteSql = "SELECT * FROM utilisateur";
+      $requeteSql = "SELECT * FROM Utilisateur";
 
       $rep = Model::$pdo->query($requeteSql);
       $tab_obj = $rep->fetchAll(PDO::FETCH_CLASS, 'ModelUtilisateur');
@@ -57,7 +56,7 @@ class ModelUtilisateur extends Model{
   }
 
   public static function getUtilisateurByLogin($login) {
-    $sql = "SELECT * from utilisateur WHERE login=:nom_tag";
+    $sql = "SELECT * from Utilisateur WHERE login=:nom_tag";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
 
@@ -90,7 +89,7 @@ class ModelUtilisateur extends Model{
   }
 
   public static function updateByLogin($login, $nom, $prenom, $password) {
-    $sql = "UPDATE `utilisateur` SET `nom` =:tag_nom, `prenom` =:tag_prenom, `password` =:tag_password WHERE `utilisateur`.`login` =:tag_login";
+    $sql = "UPDATE `Utilisateur` SET `nom` =:tag_nom, `prenom` =:tag_prenom, `mdp` =:tag_password WHERE `Utilisateur`.`login` =:tag_login";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
     $values = array(

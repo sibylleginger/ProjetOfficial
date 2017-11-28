@@ -11,6 +11,11 @@ class ModelPeluche extends Model {
 
 	protected static $object = 'peluche';
 
+	//un getter de idp
+	public function getidp() {
+		return $this->idp;
+	}
+
 	//un getter de nom
 	public function getNom() {
 		return $this->nom;
@@ -76,7 +81,7 @@ class ModelPeluche extends Model {
     public static function getAllPeluches() {
 
         try {
-            $requeteSql = "SELECT * FROM peluche";
+            $requeteSql = "SELECT * FROM Peluche";
 
             $rep = Model::$pdo->query($requeteSql);
 
@@ -97,7 +102,7 @@ class ModelPeluche extends Model {
     }
 
     public function save() {
-        $sql = "INSERT INTO peluche (nom, couleur, prix, description, taille) VALUES (
+        $sql = "INSERT INTO Peluche (nom, couleur, prix, description, taille) VALUES (
         :tag_nom, :tag_couleur, :tag_prix, :tag_description, :tag_taille)";
 
         $rep = Model::$pdo->prepare($sql);
@@ -113,13 +118,13 @@ class ModelPeluche extends Model {
         $rep->execute($values);
     }
 
-    public static function getPelucheByNom($nom) {
-        $sql = "SELECT * from peluche WHERE nom=:nom_tag";
+    public static function getPelucheByidp($idp) {
+        $sql = "SELECT * from Peluche WHERE idp=:tag_idp";
         // Préparation de la requête
         $req_prep = Model::$pdo->prepare($sql);
 
         $values = array(
-            "nom_tag" => $nom,
+            "tag_idp" => $idp,
             //nomdutag => valeur, ...
         );
         // On donne les valeurs et on exécute la requête
@@ -134,27 +139,29 @@ class ModelPeluche extends Model {
         return $tab_peluche[0];
     }
 
-    public static function deleteByNom($nom) {
-        $sql = "delete from peluche where nom=:nom_tag";
+    public static function deleteByidp($idp) {
+    	$peluche = ModelPeluche::getPelucheByidp($idp);
+		$nom = $peluche->getNom();
+        $sql = "delete from Peluche where idp=:tag_idp";
         // Préparation de la requête
         $req_prep = Model::$pdo->prepare($sql);
         $values = array(
-            "nom_tag" => $nom,
+            "tag_idp" => $idp,
                 //nomdutag => valeur, ...
         );
         // On donne les valeurs et on exécute la requête     
         $req_prep->execute($values);
     }
 
-    public static function updateByNom($nom, $couleur, $prix, $description, $taille, $lastname) {
-        $sql = "UPDATE `peluche` SET `nom` =:tag_nom, `prix` =:tag_prix, `description` =:tag_description WHERE `voiture`.`nom` =:tag_lastname";
+    public static function updateByidp($idp, $nom, $prix, $description) {
+        $sql = "UPDATE `Peluche` SET `nom` =:tag_nom, `prix` =:tag_prix, `description` =:tag_description WHERE `Peluche`.`idp` =:tag_idp";
         // Préparation de la requête
         $req_prep = Model::$pdo->prepare($sql);
         $values = array(
+        	"tag_idp" => $idp,
             "tag_nom" => $nom,
             "tag_prix" => $prix,
             "tag_description" => $description,
-            "tag_lastname" => $lastname,
                 //nomdutag => valeur, ...
         );
         // On donne les valeurs et on exécute la requête     

@@ -77,7 +77,7 @@ class ModelUtilisateur extends Model{
   }
 
   public static function deleteByLogin($login) {
-    $sql = "delete from utilisateur where login=:nom_tag";
+    $sql = "delete from Utilisateur where login=:nom_tag";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
     $values = array(
@@ -116,7 +116,7 @@ class ModelUtilisateur extends Model{
   } 
 
   public function sauvegarderNouveauUser() {
-    $sql = "INSERT INTO utilisateur (login, nom, prenom, password) VALUES (
+    $sql = "INSERT INTO Utilisateur (login, nom, prenom, mdp) VALUES (
     '$this->login', '$this->nom', '$this->prenom', '$this->password')";
     $rep = Model::$pdo->query($sql);
 
@@ -124,7 +124,7 @@ class ModelUtilisateur extends Model{
   }
 
   public function save() {
-    $sql = "INSERT INTO utilisateur (login, nom, prenom, password) VALUES (
+    $sql = "INSERT INTO Utilisateur (login, nom, prenom, mdp) VALUES (
     '$this->login', '$this->nom', '$this->prenom', '$this->password')";
     $rep = Model::$pdo->query($sql);
 

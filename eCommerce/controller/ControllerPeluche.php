@@ -24,14 +24,14 @@ class ControllerPeluche {
 
     public static function read() {
 
-        $nom_query = $_GET['nom'];
-        $peluche = ModelPeluche::getPelucheByNom($nom_query);
+        $idp_query = $_GET['idp'];
+        $peluche = ModelPeluche::getPelucheByidp($idp_query);
 
         if ($peluche == false) {
             /*  $view = 'error';
               $pagetitle = 'Attention erreur fatale mouahah';
               $controller = 'voiture';
-              //require_once File::build_path(array('view', 'voiture','error.php'));
+              //array('view', 'voiture','error.php'));
               require File::build_path(array('view', 'view.php')); */
 
             $typeError = "noPeluche";
@@ -77,8 +77,8 @@ class ControllerPeluche {
 
     public static function delete() {
 
-        $nom = $_GET['nom'];
-        $peluche = ModelPeluche::deleteByNom($nom);
+        $idp = $_GET['idp'];
+        $peluche = ModelPeluche::deleteByidp($idp);
         $tab_p = ModelPeluche::getAllPeluches();
         $view = 'deleted';
         $pagetitle = 'deleted';
@@ -96,14 +96,12 @@ class ControllerPeluche {
 
     public static function updated() {
 
-        $lastname = $_GET['lastname'];
+        $idp = $_GET['idp'];
         $nom = $_GET['nom'];
-        $couleur = $_GET['couleur'];
         $prix = $_GET['prix'];
         $description = $_GET['description'];
-        $taille = $_GET['taille'];
 
-        $peluche = ModelPeluche::updateByNom($nom, $couleur, $prix, $description, $taille, $lastname);
+        $peluche = ModelPeluche::updateByidp($idp, $nom, $prix, $description);
 
         $tab_p = ModelPeluche::getAllPeluches();
 

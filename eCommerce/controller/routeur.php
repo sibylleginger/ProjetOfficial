@@ -1,7 +1,7 @@
 <?php
 
 require_once File::build_path(array('controller', 'ControllerPeluche.php'));
-
+require_once File::build_path(array('controller', 'ControllerUtilisateur.php'));
 
 if (isset($_GET['controller'])) {
     $controller = $_GET['controller'];

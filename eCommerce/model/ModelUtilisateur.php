@@ -1,3 +1,4 @@
+
 <?php
 require_once File::build_path(array('config', 'conf.php'));
 
@@ -6,10 +7,13 @@ class ModelUtilisateur extends Model{
   private $login;
   private $nom;
   private $prenom;
-  private $password;
+  private $mdp;
   
-  protected static $object = 'utilisateur';
+  protected static $object = 'Utilisateur';
 
+  public function getId() {
+    return $this->idu;
+  }
 
   public function setLogin($login2) {
     $this->login = $login2;
@@ -55,13 +59,13 @@ class ModelUtilisateur extends Model{
     }
   }
 
-  public static function getUtilisateurByLogin($login) {
-    $sql = "SELECT * from Utilisateur WHERE login=:nom_tag";
+  public static function getUtilisateurByidu($idu) {
+    $sql = "SELECT * from Utilisateur WHERE idu=:tag_idu";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
 
     $values = array(
-      "nom_tag" => $login,
+      "tag_idu" => $idu,
                 //nomdutag => valeur, ...
     );
         // On donne les valeurs et on exécute la requête   
@@ -69,34 +73,35 @@ class ModelUtilisateur extends Model{
 
         // On récupère les résultats comme précédemment
     $req_prep->setFetchMode(PDO::FETCH_CLASS, 'ModelUtilisateur');
-    $tab_utilisateur = $req_prep->fetchAll();
+    $tab_Utilisateur = $req_prep->fetchAll();
         // Attention, si il n'y a pas de résultats, on renvoie false
-    if (empty($tab_utilisateur))
+    if (empty($tab_Utilisateur))
       return false;
-    return $tab_utilisateur[0];
+    return $tab_Utilisateur[0];
   }
 
-  public static function deleteByLogin($login) {
-    $sql = "delete from Utilisateur where login=:nom_tag";
+  public static function deleteByIdu($idu) {
+    $sql = "delete from Utilisateur where idu=:tag_idu";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
     $values = array(
-      "nom_tag" => $login,
+      "tag_idu" => $idu,
                 //nomdutag => valeur, ...
     );
         // On donne les valeurs et on exécute la requête     
     $req_prep->execute($values);
   }
 
-  public static function updateByLogin($login, $nom, $prenom, $password) {
-    $sql = "UPDATE `Utilisateur` SET `nom` =:tag_nom, `prenom` =:tag_prenom, `mdp` =:tag_password WHERE `Utilisateur`.`login` =:tag_login";
+  public static function updateByIdu($idu, $login, $nom, $prenom, $mdp) {
+    $sql = "UPDATE `Utilisateur` SET `login` =:tag_login, `nom` =:tag_nom, `prenom` =:tag_prenom, `mdp` =:tag_mdp WHERE `Utilisateur`.`idu` =:tag_idu";
         // Préparation de la requête
     $req_prep = Model::$pdo->prepare($sql);
     $values = array(
       "tag_login" => $login,
       "tag_nom" => $nom,
       "tag_prenom" => $prenom,
-      "tag_password" => $password,
+      "tag_mdp" => $mdp,
+      "tag_idu" => $idu,
                 //nomdutag => valeur, ...
     );
         // On donne les valeurs et on exécute la requête     
@@ -110,14 +115,14 @@ class ModelUtilisateur extends Model{
       $this->login = $log;
       $this->nom = $n;
       $this->prenom = $p;
-      $this->password = $ps;
+      $this->mdp = $ps;
 
     }
   } 
 
   public function sauvegarderNouveauUser() {
     $sql = "INSERT INTO Utilisateur (login, nom, prenom, mdp) VALUES (
-    '$this->login', '$this->nom', '$this->prenom', '$this->password')";
+    '$this->login', '$this->nom', '$this->prenom', '$this->mdp')";
     $rep = Model::$pdo->query($sql);
 
     return $rep;
@@ -125,7 +130,7 @@ class ModelUtilisateur extends Model{
 
   public function save() {
     $sql = "INSERT INTO Utilisateur (login, nom, prenom, mdp) VALUES (
-    '$this->login', '$this->nom', '$this->prenom', '$this->password')";
+    '$this->login', '$this->nom', '$this->prenom', '$this->mdp')";
     $rep = Model::$pdo->query($sql);
 
     return $rep;

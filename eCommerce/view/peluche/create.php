@@ -3,7 +3,6 @@
     <fieldset>
         <legend>Ajouter une peluche : </legend>
         <input type='hidden' name='action' value='created'>
-        <
         <p>
             <label for="nom">Nom</label> :
             <input type="text" placeholder="Ex : Bébert" name="nom" id="nom" required/>

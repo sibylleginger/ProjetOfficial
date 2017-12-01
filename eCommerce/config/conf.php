@@ -34,6 +34,8 @@ class Conf {
    static public function getPassword() {
     return self::$databases['password'];
    }
+
+   
 }
 ?>
 

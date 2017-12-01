@@ -12,30 +12,32 @@ require_once File::build_path(array('model', 'ModelPanier.php')); // chargement 
 
 class ControllerPanier {
 
-  public static function creationPanier(){
-    if (!isset($_SESSION['panier'])){
-      $_SESSION['panier']=array();
-      $_SESSION['panier']['idp'] = array();
-      $_SESSION['panier']['qteProduit'] = array();
-      $_SESSION['panier']['prix'] = array();
-      $_SESSION['panier']['verrou'] = false;
+  public static function create(){
+    if (!isset($_COOKIE['panier'])){
+      ModelPanier::createPanier();
     }
     return true;
   }
 
-  public static function ajouterArticle($idp,$qteProduit,$prix){
-  //Si le panier existe
-    if (creationPanier() && !isVerrouille()) {
+  public static function addProduct(){
+    $idp = $_GET['idp'];
+    $qteProduct = $_GET['qteProduct'];
+    ModelPanier::addQuantity($qteProduct);
+    $view = 'details';
+    $controller = 'panier';
+    $pagetitle = 'mon panier';
+    require File::build_path(array('view', 'view.php' ));
+
       //Si le produit existe déjà on ajoute seulement la quantité
-      $positionProduit = array_search($libelleProduit,  $_SESSION['panier']['idp']);
+      $positionProduit = array_search($idp, $_COOKIE["panier"]);
 
       if ($positionProduit !== false) {
-         $_SESSION['panier']['qteProduit'][$positionProduit] += $qteProduit ;
+        $_COOKIE['panier'][$idp]['qteProduit'] += serialize($qteProduit) ;
       }else {
         //Sinon on ajoute le produit
-        array_push( $_SESSION['panier']['idp'],$libelleProduit);
-        array_push( $_SESSION['panier']['qteProduit'],$qteProduit);
-        array_push( $_SESSION['panier']['prix'],$prix );
+        array_push( $_COOKIE['panier'][idp]= q ['idp'],serialize($idp));
+        array_push( $_COOKIE['panier']['qteProduit'],serialize($qteProduit));
+        //array_push( $_COOKIE['panier']['prix'],serialize($prix));
         $view = 'details';
         $pagetitle = 'mon panier';
         $controller = 'panier';
@@ -51,7 +53,8 @@ class ControllerPanier {
     }
   }
 
-  public static function supprimerArticle($idp){
+  public static function supprimerArticle(){
+    $idp = $_GET['idp'];
    //Si le panier existe
     if (creationPanier() && !isVerrouille()) {
       //Nous allons passer par un panier temporaire
@@ -59,17 +62,17 @@ class ControllerPanier {
       $tmp['idp'] = array();
       $tmp['qteProduit'] = array();
       $tmp['prix'] = array();
-      $tmp['verrou'] = $_SESSION['panier']['verrou'];
+      $tmp['verrou'] = $_COOKIE['panier']['verrou'];
 
-      for($i = 0; $i < count($_SESSION['panier']['idp']); $i++) {
-          if ($_SESSION['panier']['idp'][$i] !== $nomProduit) {
-            array_push( $tmp['idp'],$_SESSION['panier']['idp'][$i]);
-            array_push( $tmp['qteProduit'],$_SESSION['panier']['qteProduit'][$i]);
-            array_push( $tmp['prix'],$_SESSION['panier']['prix'][$i]);
+      for($i = 0; $i < count($_COOKIE['panier']['idp']); $i++) {
+          if ($_COOKIE['panier']['idp'][$i] !== $nomProduit) {
+            array_push( $tmp['idp'],$_COOKIE['panier']['idp'][$i]);
+            array_push( $tmp['qteProduit'],$_COOKIE['panier']['qteProduit'][$i]);
+            array_push( $tmp['prix'],$_COOKIE['panier']['prix'][$i]);
           }
       }
-      //On remplace le panier en session par notre panier temporaire à jour
-      $_SESSION['panier'] =  $tmp;
+      //On remplace le panier en COOKIE par notre panier temporaire à jour
+      $_COOKIE['panier'] =  $tmp;
       //On efface notre panier temporaire
       unset($tmp);
     } else {
@@ -83,8 +86,8 @@ class ControllerPanier {
 
   public static function montantGlobal(){
     $total=0;
-    for($i = 0; $i < count($_SESSION['panier']['idp']); $i++) {
-      $total += $_SESSION['panier']['qteProduit'][$i] * $_SESSION['panier']['prix'][$i];
+    for($i = 0; $i < count($_COOKIE['panier']['idp']); $i++) {
+      $total += $_COOKIE['panier']['qteProduit'][$i] * $_COOKIE['panier']['prix'][$i];
     }
     return $total;
   }
@@ -95,9 +98,9 @@ class ControllerPanier {
       //Si la quantité est positive on modifie sinon on supprime l'article
       if ($qteProduit > 0) {
         //Recharche du produit dans le panier
-        $positionProduit = array_search($idp,  $_SESSION['panier']['idp']);
+        $positionProduit = array_search($idp,  $_COOKIE['panier']['idp']);
         if ($positionProduit !== false) {
-          $_SESSION['panier']['qteProduit'][$positionProduit] = $qteProduit ;
+          $_COOKIE['panier']['qteProduit'][$positionProduit] = $qteProduit ;
         }
       }else {
         supprimerArticle($idp);

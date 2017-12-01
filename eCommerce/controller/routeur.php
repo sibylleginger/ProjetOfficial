@@ -12,7 +12,7 @@ if (isset($_GET['controller'])) {
         // Si on a des paramètres on les stocke dans $action
         $action = $_GET['action'];
         
-            if (in_array($_GET['action'], get_class_methods("ControllerPeluche"))) {
+            if (in_array($_GET['action'], get_class_methods($controller_class))) {
 
                 $controller_class::$action();
             } else {

@@ -23,8 +23,8 @@ class controllerUtilisateur {
   }
 
   public static function read() {
-    $login_query = $_GET['login'];
-    $utilisateur = ModelUtilisateur::getUtilisateurByLogin($login_query);
+    $idu_query = $_GET['idu'];
+    $utilisateur = ModelUtilisateur::getUtilisateurByidu($idu_query);
     if ($utilisateur == false) {
       /*  $view = 'error';
       $pagetitle = 'Attention erreur fatale mouahah';
@@ -54,10 +54,10 @@ class controllerUtilisateur {
     $login = $_GET['login'];
     $nom = $_GET['nom'];
     $prenom = $_GET['prenom'];
-    $password = $_GET['password'];
-    $password1 = $_GET['password1'];
-    if ($password == $password1) {        
-      $utilisateur = new ModelUtilisateur($login, $nom, $prenom, $password);
+    $mdp = $_GET['mdp'];
+    $mdp1 = $_GET['mdp1'];
+    if ($mdp == $mdp1) {        
+      $utilisateur = new ModelUtilisateur($login, $nom, $prenom, $mdp);
       $utilisateur->save();
       $utilisateurs = ModelUtilisateur::getAllUtilisateurs();
       $view = 'Created';
@@ -66,7 +66,7 @@ class controllerUtilisateur {
       //require_once File::build_path(array('view', 'voiture','create.php'));
       require File::build_path(array('view', 'view.php'));
     } else {
-      $typeError = "diffPasswordCreate";
+      $typeError = "diffmdpCreate";
       $view = 'error';
       $pagetitle = 'Error';
       $controller = 'utilisateur';
@@ -84,8 +84,8 @@ class controllerUtilisateur {
 
   public static function delete() {
 
-    $login = $_GET['login'];
-    $utilisateur = ModelUtilisateur::deleteByLogin($login);
+    $idu = $_GET['idu'];
+    $utilisateur = ModelUtilisateur::deleteByidu($idu);
     $utilisateurs = ModelUtilisateur::getAllUtilisateurs();
     $view = 'deleted';
     $pagetitle = 'deleted';
@@ -95,14 +95,15 @@ class controllerUtilisateur {
 
   public static function updated() {
 
+    $idu = $_GET['idu'];
     $login = $_GET['login'];
     $nom = $_GET['nom'];
     $prenom = $_GET['prenom'];
-    $password = $_GET['password'];
-    $password1 = $_GET['password1'];
+    $mdp = $_GET['mdp'];
+    $mdp1 = $_GET['mdp1'];
 
-    if ($password == $password1) {
-      $utilisateur = Modelutilisateur::updateByLogin($login, $nom, $prenom, $password);
+    if ($mdp == $mdp1) {
+      $utilisateur = Modelutilisateur::updateByidu($idu, $login, $nom, $prenom, $mdp);
 
       $utilisateurs = Modelutilisateur::getAllUtilisateurs();
 
@@ -112,7 +113,7 @@ class controllerUtilisateur {
           //require_once File::build_path(array('view', 'voiture','create.php'));
       require File::build_path(array('view', 'view.php'));
     } else {
-      $typeError = 'diffPasswordUpdate';
+      $typeError = 'diffmdpUpdate';
 
     }
   }

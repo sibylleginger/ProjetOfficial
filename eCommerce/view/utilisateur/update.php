@@ -21,12 +21,12 @@
 
         <p>
             <label for="mdp">mdp</label> :
-            <input type="mdp" name="mdp" id="mdp" required/>
+            <input type="password" name="mdp" id="mdp" required/>
         </p>
 
         <p>
             <label for="mdp1">Vérification du mdp</label> :
-            <input type="mdp" name="mdp1" id="mdp1" required/>
+            <input type="password" name="mdp1" id="mdp1" required/>
         </p>
 
         <p><input type="submit" value="Soumettre" /></p>

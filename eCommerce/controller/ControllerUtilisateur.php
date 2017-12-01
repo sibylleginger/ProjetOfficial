@@ -1,17 +1,13 @@
-  <?php
-
+<?php
   /* require_once ('../model/Modelutilisateur.php'); 
     // chargement du modèle
     $tab_v = Modelutilisateur::getAllutilisateurs();
     //appel au modèle pour gerer la BD
     require ('../view/utilisateur/list.php');
     //redirige vers la vue */
-
     require_once File::build_path(array('model', 'Model.php'));
 require_once File::build_path(array('model', 'ModelUtilisateur.php')); // chargement du modèle
-
 class controllerUtilisateur {
-
   public static function readAll() {
     $utilisateurs = ModelUtilisateur::getAllUtilisateurs();
     //appel au modèle pour gerer la BD
@@ -21,7 +17,6 @@ class controllerUtilisateur {
     $controller = 'utilisateur';
     require File::build_path(array('view', 'view.php'));
   }
-
   public static function read() {
     $idu_query = $_GET['idu'];
     $utilisateur = ModelUtilisateur::getUtilisateurByidu($idu_query);
@@ -32,7 +27,10 @@ class controllerUtilisateur {
       //require_once File::build_path(array('view', 'voiture','error.php'));
       require File::build_path(array('view', 'view.php')); */
       $typeError = "noUser";
-      require File::build_path(array('view', 'utilisateur', 'error.php'));
+      $view = 'error';
+      $pagetitle = 'Error';
+      $controller = 'utilisateur';
+      require File::build_path(array('view', 'view.php'));
     } else {
       $view = 'detail';
       $pagetitle = 'Notre utilisateur';
@@ -41,7 +39,6 @@ class controllerUtilisateur {
       require File::build_path(array('view', 'view.php'));
     }
   }
-
   public static function create() {
     $view = 'create';
     $pagetitle = 'Inscription';
@@ -49,7 +46,6 @@ class controllerUtilisateur {
     //require_once File::build_path(array('view', 'voiture','create.php'));
     require File::build_path(array('view', 'view.php'));
   }
-
   public static function created() {
     $login = $_GET['login'];
     $nom = $_GET['nom'];
@@ -73,7 +69,6 @@ class controllerUtilisateur {
       require File::build_path(array('view', 'view.php'));
     }
   }
-
   public static function update() {
     $view = 'update';
     $pagetitle = 'Modifiez votre compte';
@@ -81,9 +76,7 @@ class controllerUtilisateur {
     //require_once File::build_path(array('view', 'voiture','create.php'));
     require File::build_path(array('view', 'view.php'));
   }
-
   public static function delete() {
-
     $idu = $_GET['idu'];
     $utilisateur = ModelUtilisateur::deleteByidu($idu);
     $utilisateurs = ModelUtilisateur::getAllUtilisateurs();
@@ -92,21 +85,16 @@ class controllerUtilisateur {
     $controller = 'utilisateur';
     require_once File::build_path(array('view', 'view.php'));
   }
-
   public static function updated() {
-
     $idu = $_GET['idu'];
     $login = $_GET['login'];
     $nom = $_GET['nom'];
     $prenom = $_GET['prenom'];
     $mdp = $_GET['mdp'];
     $mdp1 = $_GET['mdp1'];
-
     if ($mdp == $mdp1) {
       $utilisateur = Modelutilisateur::updateByidu($idu, $login, $nom, $prenom, $mdp);
-
       $utilisateurs = Modelutilisateur::getAllUtilisateurs();
-
       $view = 'updated';
       $pagetitle = 'updated';
       $controller = 'utilisateur';
@@ -114,9 +102,21 @@ class controllerUtilisateur {
       require File::build_path(array('view', 'view.php'));
     } else {
       $typeError = 'diffmdpUpdate';
-
+      $view = 'error';
+      $pagetitle = 'error';
+      $controller = 'utilisateur';
+      require File::build_path(array('view', 'view.php'));
     }
   }
+
+  public static function error($error) {
+    $typeError = $error;
+    $view = 'error';
+    $pagetitle = 'Error';
+    $controller = 'utilisateur';
+    require_once File::build_path(array('view','view.php'));
+  }
+
 }
 
 ?>

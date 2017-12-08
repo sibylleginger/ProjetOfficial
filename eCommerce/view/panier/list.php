@@ -3,15 +3,16 @@
 <?php
 	if(!isset($_COOKIE['panier'])) {
 		echo "<h3>Votre panier est vide ! </h3>";
-	} else {
-		foreach ($_COOKIE['panier'] as $key) {
-			$idp = $KEY['idp'];
-			$nbp = $KEY['nbp'];
-			$peluche = ModelPanier::select($idp);
-			echo $peluche->getNom();
+	}else {
+		$nbPeluche = count($panier);
+		var_dump($panier);
+		foreach ($panier as $peluche) {
+
+			$peluche = ModelPeluche::select($peluche['idp']);
+			echo $peluche->getNom(). ' quantité ' . $peluche['nbp']. '<br>';
 		}
+		echo '<a href="index.php?action=removePanier&controller=panier">Retirer tous les articles du panier</a>';
 	}
 
 ?>
 
-<a href="index.php?action=removePanier&controller=panier">Retirer tous les articles du panier</a>

@@ -5,35 +5,37 @@ class ControllerPanier {
 
   public static function addPanier() {
     //Si la peluche n'existe pas
+    echo "aa";
     if(!isset($_GET['idp'])) {
       self::error('noPeluches');
     } else {
       $idp = $_GET['idp'];
-      echo $idp;
       //si le panier est vide
       if (!isset($_COOKIE['panier'])) {
         $nbp = 1;
         //setcookie('panier', serialize(array()), time()+3600);
         //$panier = unserialize($_COOKIE["panier"]);
         //$panier[] = array(
-        $_COOKIE['panier'] = array(
-          'peluche'.$idp => array(
-            'idp' => $idp,
-            'nbp' => $nbp
-          )
-        );
-        setcookie('panier', serialize($_COOKIE['panier']), time()+3600);
-        echo unserialize($_COOKIE['panier']);
-      } else {
-        //si la peluche n'est pas déjà présente
-        if(!isset($_COOKIE['panier']['peluche'.$idp])) {
-          $nbp = 1;
-          $_COOKIE['panier']['peluche'.$idp] = array(
-            'idp' => $idp,
-            'nbp' => $nbp
+        $panier[] = array(
+          'idp' => $idp,
+          'nbp' => $nbp
           );
+        setcookie('panier', serialize($panier), time()+3600);
+        header('location:index.php?action=readAll&controller=panier');
+        
+      } else {
+        $panier = unserialize($_COOKIE['panier']);
+        $ligneProduit = array_search($idp, $panier);
+        //si la peluche n'est pas déjà présente
+        if($ligneProduit == false) {
+          $nbp = 1;
+          $peluche = array('idp' => $idp, 'nbp' => $nbp);
+          $panier[]=$peluche;
+          $_COOKIE['panier'] = serialize($panier);
+          self::readAll();
+
         } else {
-          $_COOKIE['panier']['peluche'.$idp]['nbp'] ++;
+          $panier['nbp'] = $panier['nbp'] + 1;
         }
       }
       
@@ -45,33 +47,34 @@ class ControllerPanier {
       self::error('noPeluche');
     } else {
       $idp = $_GET['idp'];
-      $_COOKIE['panier']['peluche'.$idp]['nbp'] --;
-      setcookie('panier', serialize($_COOKIE['panier']['peluche'.$idp]['nbp']), time()+3600);
-      $nbp = unserialize($_COOKIE['panier']['peluche'.$idp]['nbp']);
-      if($nbp <=0) {
-        setcookie('panier', serialize($_COOKIE['panier']['peluche'.$idp]), time()-1);
+      $panier = unserialize($_COOKIE['panier']);
+      $panier['nbp'] = $panier['nbp']-1;
+      $_COOKIE['panier'] = $panier;
+      if($panier['nbp'] <=0) {
+        unset($_COOKIE['panier']['idp']);
       }
       if(count($_COOKIE['panier']) == 0) {
         unset($_COOKIE['panier']);
       }
     }
-    self::readPanier();
+    self::readAll();
   }
 
   public static function readAll() {
     $controller = 'panier';
     $view = 'list';
     $pagetitle = 'Mon Panier';
+    if(isset($_COOKIE['panier'])) {
+      $panier = unserialize($_COOKIE['panier']);
+      var_dump($_COOKIE);
+      var_dump($panier);
+    }
     require File::build_path(array('view', 'view.php'));
   }
 
   public static function removePanier() {
-    if(!isset($_COOKIE['panier'])) {
-      self::error('noPeluche');
-    } else {
-      setcookie('panier', serialize($_COOKIE['panier']), time()-1);
-      self::readAll();
-    }
+    setcookie('panier','',-1);
+    header('location:index.php?action=readAll&controller=panier');
   }
 
   public static function error($error) {

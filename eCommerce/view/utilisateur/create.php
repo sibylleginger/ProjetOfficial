@@ -1,7 +1,7 @@
 
-<form method="get" action="index.php">
+<form method="get" action="index.php?controller=utilisateur&action=created">
     <fieldset>
-        <legend>Créer un utilisateur : </legend>
+        <legend>Inscription : </legend>
         <input type='hidden' name='action' value='created'>
         <input type='hidden' name='controller' value='utilisateur'>
         <p>
@@ -20,16 +20,22 @@
         </p>
 
         <p>
-            <label for="password"> Password</label>
-            <input type="password" name="password">
+            <label for="email">Email</label> :
+            <input type="email" placeholder="Ex : Corentin.moutarde@gamil.com" name="email" id="email" required/>
         </p>
 
         <p>
-            <label for="password1"> Password</label>
-            <input type="password" name="password1">
+            <label for="mdp">Mot de passe</label> :
+            <input type="password" name="mdp" required/>
         </p>
 
-        <p><input type="submit" value="Soumettre" /></p>
+        <p>
+            <label for="mdp1">Confirmation du mot de passe</label> :
+            <input type="password" name="mdp1" required/>
+        </p>
 
+        <p>
+            <input type="submit" value="S'inscrire" />
+        </p>
     </fieldset>
 </form>

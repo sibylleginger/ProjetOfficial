@@ -4,8 +4,10 @@ require_once File::build_path(array('controller', 'ControllerPeluche.php'));
 require_once File::build_path(array('controller', 'ControllerUtilisateur.php'));
 require_once File::build_path(array('controller', 'ControllerPanier.php'));
 
+//Vérifie si le controller est donné
 if (isset($_GET['controller'])) {
     $controller = $_GET['controller'];
+    //Met une majuscule à la première lettre du controller
     $controller_class = 'Controller'.ucfirst($controller);
     if(class_exists($controller_class)) {
         if (isset($_GET['action'])) {

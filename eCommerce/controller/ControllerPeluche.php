@@ -1,82 +1,124 @@
 <?php
-/* require_once ('../model/ModelVoiture.php'); 
-  // chargement du modèle
-  $tab_v = ModelVoiture::getAllVoitures();
-  //appel au modèle pour gerer la BD
-  require ('../view/voiture/list.php');
-  //redirige vers la vue */
-require_once File::build_path(array('model', 'Model.php'));
 require_once File::build_path(array('model', 'ModelPeluche.php')); // chargement du modèle
+
 class ControllerPeluche {
+
     public static function readAll() {
-        $tab_p = ModelPeluche::getAllPeluches();
-             //appel au modèle pour gerer la BD
-        //require File::build_path(array('view', 'voiture','list.php'));  //"redirige" vers la vue
+        $tab_p = ModelPeluche::selectAll();
+        //paramètres de la vue désirée
         $view = 'list';
         $pagetitle = 'Liste des peluches';
         $controller = 'peluche';
+        //"redirige" vers la vue
         require File::build_path(array('view', 'view.php'));
     }
+
     public static function read() {
-        $idp_query = $_GET['idp'];
-        $peluche = ModelPeluche::getPelucheByidp($idp_query);
-        if ($peluche == false) {
-            /*  $view = 'error';
-              $pagetitle = 'Attention erreur fatale mouahah';
-              $controller = 'voiture';
-              //array('view', 'voiture','error.php'));
-              require File::build_path(array('view', 'view.php')); */
-            $typeError = "noPeluche";
-            $view = 'error';
-            $pagetitle = 'Error';
-            $controller = 'peluche';
-            require File::build_path(array('view', 'view.php'));
+        //si l'id de la peluche n'est pas dans l'url
+        if (!isset($_GET['idp'])) {
+            //appelle l'erreur
+            self::error('noPeluche');
         } else {
-            $view = 'detail';
-            $pagetitle = 'Votre peluche';
-            $controller = 'peluche';
-            //require_once File::build_path(array('view', 'voiture','detail.php'));
-            require File::build_path(array('view', 'view.php'));
+            //stock l'id de la peluche dans une variable
+            $idp_query = $_GET['idp'];
+            //récupère la peluche
+            $peluche = ModelPeluche::select($idp_query);
+            //si aucune peluche n'a l'id de l'url
+            if ($peluche == false) {
+                //appelle l'erreur
+                self::error(noPeluche);
+            } else {
+                //paramètres de la vue désirée
+                $view = 'detail';
+                $pagetitle = 'Votre peluche';
+                $controller = 'peluche';
+                //redirige vers la vue
+                require File::build_path(array('view', 'view.php'));
+            }
         }
     }
+
     public static function create() {
+        //paramètres de la vue désirée
         $view = 'create';
         $pagetitle = 'Nouvelle peluche';
         $controller = 'peluche';
-        //require_once File::build_path(array('view', 'voiture','create.php'));
+        //redirige vers la vue
         require File::build_path(array('view', 'view.php'));
     }
+
     public static function created() {
-        $nom = $_GET['nom'];
-        $couleur = $_GET['couleur'];
-        $prix = $_GET['prix'];
-        $description = $_GET['description'];
-        $taille = $_GET['taille'];
-        $peluche = new ModelPeluche($nom, $couleur, $prix, $description, $taille);
-        $peluche->save();
-        $tab_p = ModelPeluche::getAllPeluches();
-        $view = 'created';
-        $pagetitle = 'Créée';
-        $controller = 'peluche';
-        //require_once File::build_path(array('view', 'voiture','create.php'));
-        require File::build_path(array('view', 'view.php'));
+        // stockage les valeurs de l'url
+        $data = array(
+            "nom" => $_GET['nom'],
+            "couleur" => $_GET['couleur'],
+            "prix" => $_GET['prix'],
+            "description" => $_GET['description'],
+            "taille" => $_GET['taille']
+        );
+        //création de la peluche avec les valeurs
+        //sauvegarde de la peluche dans la Base de Données
+        $peluche = ModelPeluche::save($data);
+        require File::build_path(array('view', 'peluche', 'created.php'));
+        self::readAll();
     }
+
     public static function delete() {
+        //stockage de l'id de la peluche
         $idp = $_GET['idp'];
-        $peluche = ModelPeluche::deleteByidp($idp);
-        $tab_p = ModelPeluche::getAllPeluches();
-        $view = 'deleted';
-        $pagetitle = 'deleted';
-        $controller = 'peluche';
-        require_once File::build_path(array('view', 'view.php'));
+        //suppression la peluche
+        $delete = ModelPeluche::delete($idp);
+        if ($delete == true) {
+        require File::build_path(array("view", "peluche", "deleted.php"));
+        //echo "La peluche a été supprimée !";
+        } else {
+            self::error();
+        }
+        self::readAll();
+    }
+
+    public static function update() {
+        $idp = $_GET['idp'];
+        $peluche = ModelPeluche::select($idp);
+        if($peluche != false) {
+            //paramètres de la vue désirée
+            $view = 'update';
+            $pagetitle = 'Modifiez votre peluche';
+            $controller = 'peluche';
+            //redirige vers la vue
+            require File::build_path(array('view', 'view.php'));
+        } else {
+            self::error();
+        }
+        
+    }
+
+    public static function updated() {
+        //stockage des valeurs de l'url
+        $data = array(
+            "idp" => $_GET['idp'],
+            "nom" => $_GET['nom'],
+            "prix" => $_GET['prix'],
+            "description" => $_GET['description']
+        );
+        //Met à jour la peluche dans la base de données
+        $peluche = ModelPeluche::update($data);
+        if ($peluche == false) {
+            echo"Echec de mise à jour...";
+        } else {
+        require File::build_path(array('view', 'peluche', 'updated.php'));
+        }
+        self::readAll();
     }
 
     public static function error($error) {
-        $typeError = $error;
+        //paramètres de la vue et de l'erreur désirées
         $view = 'error';
-        $pagetitle = 'Error';
+        $typeError = $error;
         $controller = 'peluche';
-        require_once File::build_path(array('view','view.php'));
+        //redirige vers la vue
+        require_once File::build_path(array('view', 'view.php'));
     }
 }
+
 ?>

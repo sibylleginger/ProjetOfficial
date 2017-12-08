@@ -1,4 +1,3 @@
-
 <form method="get" action="index.php">
     <fieldset>
         <legend>Ajouter une peluche : </legend>

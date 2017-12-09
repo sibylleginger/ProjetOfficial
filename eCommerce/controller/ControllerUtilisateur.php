@@ -143,40 +143,48 @@ class controllerUtilisateur {
 
 
     public static function readAll() {
-      //créé un tableau contenant tous les utilisateurs
-      $utilisateurs = ModelUtilisateur::selectAll();
-      //paramètres de la vue désirée
-      $view = 'list';
-      $pagetitle = 'Liste des utilisateurs';
-      $controller = 'utilisateur';
-    //redirige vers la vue
-      require File::build_path(array('view', 'view.php'));
+      if (Session::isConnected()) {
+        //créé un tableau contenant tous les utilisateurs
+        $utilisateurs = ModelUtilisateur::selectAll();
+        //paramètres de la vue désirée
+        $view = 'list';
+        $pagetitle = 'Liste des utilisateurs';
+        $controller = 'utilisateur';
+      //redirige vers la vue
+        require File::build_path(array('view', 'view.php'));
+      } else {
+        self::error('notConnected');
+      }
     }
 
     public static function read() {
       if (isset($_GET['idu'])) {
         $idu_query = $_GET['idu'];
         $utilisateur = ModelUtilisateur::select($idu_query);
-        $login = $utilisateur->getLogin();
-        $isAdmin = $utilisateur->getisAdmin();
-        if (Session::isUser($login)||Session::isAdmin()) {
-          if ($isAdmin == 1) {
-            $html_admin = 'Cet utilisateur est un administrateur';
-          } else {
-            $html_admin = '';
-          }
-          //paramètres de la vue désirée
-          $view = 'detail';
-          $pagetitle = 'Notre utilisateur';
-          $controller = 'utilisateur';
-          //redirige vers la vue 
-          require File::build_path(array('view', 'view.php'));
+        if ($utilisateur == false) {
+          self::error('noUser');
         } else {
-          self::error('notConnected');
+          $login = $utilisateur->getLogin();
+          $isAdmin = $utilisateur->getisAdmin();
+          if (Session::isUser($login)||Session::isAdmin()) {
+            if ($isAdmin == 1) {
+              $html_admin = '<h4>Administrateur</h4>';
+            } else {
+              $html_admin = '';
+            }
+            //paramètres de la vue désirée
+            $view = 'detail';
+            $pagetitle = 'Notre utilisateur';
+            $controller = 'utilisateur';
+            //redirige vers la vue 
+            require File::build_path(array('view', 'view.php'));
+          } else {
+            self::error('badLog');
+          }
         }
       } else {
         //fait appel à l'erreur
-        self::erreur('noUser');
+        self::error('noIdu');
       }
     }
 
@@ -198,6 +206,16 @@ class controllerUtilisateur {
       $u_email = 'Ex : Corentin.moutarde@gamil.com';
       $v_admin = '';
 
+      $html_password = '<p>
+        <label for="mdp">mdp</label> :
+        <input type="password" name="mdp" id="mdp" required/>
+        </p>
+        <p>
+        <label for="mdp1">Vérification du mdp</label> :
+        <input type="password" name="mdp1" id="mdp1" required/>
+        </p>'
+
+
       $v_action = 'created';
     //paramètres de la vue désirée
       $view = 'createupdate';
@@ -210,69 +228,73 @@ class controllerUtilisateur {
     public static function created() {
     //stockage dans des variables des valeurs de l'url
       $login = $_GET['login'];
-      $nom = $_GET['nom'];
-      $prenom = $_GET['prenom'];
-      $email = $_GET['email'];
-      $mdp = $_GET['mdp'];
-      $mdp1 = $_GET['mdp1'];
-
-      $mdp = self::chiffrer($mdp);
-      $mdp1 = self::chiffrer($mdp1);
-      $nonce = self::generateRandomHex();
-      $data = array(
-        "login" => $login,
-        "nom" => $nom,
-        "prenom" => $prenom,
-        "email" => $email,
-        "mdp" => $mdp,
-        "isAdmin" => 0,
-        "nonce" => $nonce
-      );
-      if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-        $message = "Adresse email invalide";
-        $pagetitle = "Erreur email";
-        //paramètres de la vue désirée
-        $view = 'create';
-        $pagetitle = 'Inscription';
-        $controller = 'utilisateur';
-        //redirection vers la vue
-        require File::build_path(array('view', 'view.php'));
+      if (ModelUtilisateur::redondance('login', $login)) {
+        self::error('login');
       } else {
-        if ($mdp == $mdp1) {
-          //l'utilisateur est créé
-          $utilisateur = ModelUtilisateur::save($data);
-          if ($utilisateur == false) {
-            $message = "Cet utilisateur existe déjà";
-            $pagetitle = "Erreur";
-            //paramètres de la vue désirée
-            $view = 'create';
-            $pagetitle = 'Inscription';
-            $controller = 'utilisateur';
-            //redirection vers la vue
-            require File::build_path(array('view', 'view.php'));
-          } else {
-            $mail = 'Bonjour, pour finaliser votre inscription veuillez cliquer sur ce lien  <a href="index.php?controller=utilisateur&action=validate&login=' . $login . '&nonce=' . $nonce . '">ici</a>';          
-            mail($email,"Inscription",$mail);
-            $message = "Nous venons de vous envoyer un email, veuillez aller sur votre messagerie afin de confirmer votre inscription.";
-            $pagetitle = "Inscription";
-          }
-        } else {
-          $message = "Les champs mot de passe et confirmation du mot de passe doivent être les mêmes.";
-          $pagetitle = "Erreur de mot de passe";
+        $nom = $_GET['nom'];
+        $prenom = $_GET['prenom'];
+        $email = $_GET['email'];
+        $mdp = $_GET['mdp'];
+        $mdp1 = $_GET['mdp1'];
+
+        $mdp = self::chiffrer($mdp);
+        $mdp1 = self::chiffrer($mdp1);
+        $nonce = self::generateRandomHex();
+        $data = array(
+          "login" => $login,
+          "nom" => $nom,
+          "prenom" => $prenom,
+          "email" => $email,
+          "mdp" => $mdp,
+          "isAdmin" => 0,
+          "nonce" => $nonce
+        );
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+          $message = "Adresse email invalide";
+          $pagetitle = "Erreur email";
           //paramètres de la vue désirée
           $view = 'create';
           $pagetitle = 'Inscription';
           $controller = 'utilisateur';
           //redirection vers la vue
           require File::build_path(array('view', 'view.php'));
+        } else {
+          if ($mdp == $mdp1) {
+            //l'utilisateur est créé
+            $utilisateur = ModelUtilisateur::save($data);
+            if ($utilisateur == false) {
+              $message = "Cet utilisateur existe déjà";
+              $pagetitle = "Erreur";
+              //paramètres de la vue désirée
+              $view = 'create';
+              $pagetitle = 'Inscription';
+              $controller = 'utilisateur';
+              //redirection vers la vue
+              require File::build_path(array('view', 'view.php'));
+            } else {
+              $mail = 'Bonjour, pour finaliser votre inscription veuillez cliquer sur ce lien  <a href="index.php?controller=utilisateur&action=validate&login=' . $login . '&nonce=' . $nonce . '">ici</a>';          
+              mail($email,"Inscription",$mail);
+              $message = "Nous venons de vous envoyer un email, veuillez aller sur votre messagerie afin de confirmer votre inscription.";
+              $pagetitle = "Inscription";
+            }
+          } else {
+            $message = "Les champs mot de passe et confirmation du mot de passe doivent être les mêmes.";
+            $pagetitle = "Erreur de mot de passe";
+            //paramètres de la vue désirée
+            $view = 'create';
+            $pagetitle = 'Inscription';
+            $controller = 'utilisateur';
+            //redirection vers la vue
+            require File::build_path(array('view', 'view.php'));
+          }
+          $utilisateurs = ModelUtilisateur::selectAll();
+          //paramètres de la vue désirée
+          $view = 'created';
+          $pagetitle = 'Oki';
+          $controller = 'utilisateur';
+          //redirection vers la vue
+          require File::build_path(array('view', 'view.php'));
         }
-        $utilisateurs = ModelUtilisateur::selectAll();
-        //paramètres de la vue désirée
-        $view = 'created';
-        $pagetitle = 'Oki';
-        $controller = 'utilisateur';
-        //redirection vers la vue
-        require File::build_path(array('view', 'view.php'));
       }
     }
 

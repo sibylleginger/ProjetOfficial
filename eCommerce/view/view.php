@@ -18,6 +18,8 @@ echo '<ul style="border: 1px solid black;text-align:right;padding-right:1em;">';
 //onglet disponible pour tous
 echo '<li><a href="index.php?action=readAll" > Accueil </a> </li>';
 if (Session::isConnected()) {
+    $idu = $_SESSION['idu'];
+    echo '<li><a href="index.php?action=read&controller=utilisateur&idu='.$idu.'">Mon Profil</a>';
     echo $pannier_readAll;
     echo $u_readAll;
     echo $u_disconnect;

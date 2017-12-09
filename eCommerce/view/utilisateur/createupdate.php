@@ -19,16 +19,10 @@
             <input type="text" <?php echo $affichage."='$u_prenom'"; ?> name="prenom" id="prenom" required/>
         </p>
 
-        <p>
-            <label for="mdp">mdp</label> :
-            <input type="password" name="mdp" id="mdp" required/>
-        </p>
-
-        <p>
-            <label for="mdp1">Vérification du mdp</label> :
-            <input type="password" name="mdp1" id="mdp1" required/>
-        </p>
-
+        <?php
+            echo $html_password;
+        ?>
+        
         <p>
             <label for="email">email</label> :
             <input type="email" <?php echo $affichage."='$u_email'"; ?> name="email" id="email" required/>

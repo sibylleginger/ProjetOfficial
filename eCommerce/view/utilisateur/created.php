@@ -6,8 +6,6 @@
         echo $_SESSION['message'];
         unset($_SESSION['message']);
     }
-    echo "mdp:".$mdp;
-    echo"<br>cc";
     /* if(isset($message)){
         echo $message;
     } */

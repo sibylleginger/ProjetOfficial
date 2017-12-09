@@ -7,7 +7,7 @@ class ControllerPeluche {
         $tab_p = ModelPeluche::selectAll();
         //paramètres de la vue désirée
         $view = 'list';
-        $pagetitle = 'Liste des peluches';
+        $pagetitle = 'Peluches factory';
         $controller = 'peluche';
         //"redirige" vers la vue
         require File::build_path(array('view', 'view.php'));
@@ -19,15 +19,31 @@ class ControllerPeluche {
             //appelle l'erreur
             self::error('noPeluche');
         } else {
-            //stock l'id de la peluche dans une variable
-            $idp_query = $_GET['idp'];
+            $id = rawurlencode($_GET['idp']);
             //récupère la peluche
-            $peluche = ModelPeluche::select($idp_query);
+            $peluche = ModelPeluche::select($id);
             //si aucune peluche n'a l'id de l'url
             if ($peluche == false) {
                 //appelle l'erreur
                 self::error(noPeluche);
             } else {
+
+                //on stock ses données
+                $p_idp = $peluche->getIdp();
+                $p_nom = $peluche->getNom();
+                $p_description = $peluche->getDescription();
+                $p_prix = $peluche->getPrix();
+                $p_taille = $peluche->getTaille();
+
+
+                if (Session::isAdmin()) {
+                $html_admin = '<br> <a href="index.php?action=delete&idp='
+                . $id . '" > supprimer</a> <a href="index.php?action=update&idp='
+                . $id . '" > modifier</a>';
+                } else {
+                    $html_admin = '';
+                }                
+
                 //paramètres de la vue désirée
                 $view = 'detail';
                 $pagetitle = 'Votre peluche';
@@ -53,18 +69,28 @@ class ControllerPeluche {
 
     public static function created() {
         if (Session::isAdmin()) {
-            $data = array(
-            "nom" => $_GET['nom'],
-            "couleur" => $_GET['couleur'],
-            "prix" => $_GET['prix'],
-            "description" => $_GET['description'],
-            "taille" => $_GET['taille']
-            );
-            //création de la peluche avec les valeurs
-            //sauvegarde de la peluche dans la Base de Données
-            $peluche = ModelPeluche::save($data);
-            require File::build_path(array('view', 'peluche', 'created.php'));
-            self::readAll();
+            $prix = $_GET['prix'];
+            if ($prix < 0) {
+                self::error('price');
+            } else {
+                $nom = $_GET['nom'];
+                $data = array(
+                "nom" => $_GET['nom'],
+                "couleur" => $_GET['couleur'],
+                "prix" => $prix,
+                "description" => $_GET['description'],
+                "taille" => $_GET['taille']
+                );
+                //création de la peluche avec les valeurs
+                //sauvegarde de la peluche dans la Base de Données
+                if (ModelPeluche::redondance('nom', $nom)) {
+                    self::error('nomExist');
+                } else {
+                    $peluche = ModelPeluche::save($data);
+                    require File::build_path(array('view', 'peluche', 'created.php'));
+                    self::readAll();
+                }
+            }
         } else {
             ControllerUtilisateur::error('isNotAdmin');
         }

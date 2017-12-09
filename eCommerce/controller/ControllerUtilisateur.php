@@ -1,6 +1,6 @@
 <?php
 require_once File::build_path(array('model', 'ModelUtilisateur.php')); // chargement du modèle
-require_once File::build_path(array('lib', 'Session.php')); // chargement du modèle
+require_once File::build_path(array('lib', 'session.php')); // chargement du modèle
 
 class controllerUtilisateur {
 

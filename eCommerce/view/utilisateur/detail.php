@@ -13,6 +13,7 @@ echo "<li>Prenom : ".$u_prenom."</li></ul>";
 echo $html_admin;
 
 echo '<p><a href="index.php?action=delete&controller=utilisateur&idu='
-    . $id . '" > supprimer</a> <a href="index.php?action=update&controller=utilisateur&idu='
-    . $id . '" > modifier</a> <a href="index.php?action=readAll&controller=utilisateur"> Retour</a> </p>';
+    . $id . '" > Supprimer</a> <a href="index.php?action=update&controller=utilisateur&idu='
+    . $id . '" > Modifier</a> <a href="index.php?action=update&password=modifier&controller=utilisateur&idu='
+    . $id . '" > Changer de mot de passe</a> <a href="index.php?action=readAll&controller=utilisateur"> Retour</a> </p>';
 ?>

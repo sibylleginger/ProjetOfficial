@@ -5,11 +5,16 @@ if ($typeError == "badParameter") echo "Ces paramètres n'existent pas";
 
 if($typeError == "noUser") echo "Cet utilisateur n'existe pas !! (Raisons: suppression ou pas encore créé)";
 
-if($typeError == "noIdu") echo "Il faut un identifiant utilisateur afin de lire ses détails !!";
+if($typeError == "noIdu") echo "Il faut un identifiant utilisateur!!";
 
 if($typeError == "login") echo "Ce login est déjà utilisé!! <a href='index.php?action=create&controller=utilisateur'>Créer à nouveau</a>";
 
-if($typeError == "diffPasswordCreate") echo 'Les mots de passe ne sont pas identiques.<br><a href="index.php?action=create&controller=utilisateur">retour</a>';
+if($typeError == "diffPassword") echo 'Les mots de passe ne sont pas identiques.<br><a href="index.php?action=update&password=modifier&controller=utilisateur&idu='
+    .$_GET['idu']. '" > Changer de mot de passe</a>';
+
+if($typeError == "diffLastPassword") echo 'Vous n\'avez pas saisi le même ancien mot de passe.<a href="index.php?action=update&password=modifier&controller=utilisateur&idu='
+    .$_GET['idu']. '" > Changer de mot de passe</a>';
+
 if($typeError == "samePassword") echo 'Le mot de passe est le même que l\'ancien.';
 
 if($typeError == "emptyCase") echo "Il faut remplir tous les champs !";

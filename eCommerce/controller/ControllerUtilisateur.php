@@ -199,12 +199,31 @@ class controllerUtilisateur {
       }
       $nom_action = 'Création de l\'utilisateur';
       $affichage = 'placeholder';
-
-      $u_login = 'Ex : ColonelMoutarde';
-      $u_nom = 'Ex : Moutarde';
-      $u_prenom = 'Ex : Corentin';
-      $u_email = 'Ex : Corentin.moutarde@gamil.com';
       $v_admin = '';
+
+      $v_admin = '';
+
+        $html_login = '
+        <p>
+            <label for="login_id">Login</label> :
+            <input type="text" name="login" id="login"'.$affichage.'="Ex : ColonelMoutarde" required/>
+        </p>';
+        $html_nom = '
+        <p>
+            <label for="nom">Nom</label> :
+            <input type="text" name="nom" id="nom" '.$affichage.'="Ex : Moutarde"  required/>
+        </p>';
+         $html_prenom = '
+         <p>
+            <label for="prenom">Prénom</label> :
+            <input type="text" name="prenom" id="prenom" '.$affichage.'="Ex : Corentin"  required/>
+        </p>';
+        $html_password ='';
+        $html_email = '
+        <p>
+            <label for="email">email</label> :
+            <input type="email" '.$affichage.'="Ex : Corentin.moutarde@gamil.com" name="email" id="email" required/>
+        </p>';
 
       $html_password = '<p>
         <label for="mdp">mdp</label> :
@@ -299,40 +318,96 @@ class controllerUtilisateur {
     }
 
     public static function update() {
-      if (Session::isAdmin()) {
-        $html_admin = '<p>
-          <label for="isAdmin">Admin?</label> :
-          <input type="checkbox" value="1" name="isAdmin" id="isAdmin" />
-        </p>';
-      } else {
-        $html_admin = '';
-      }
-      $nom_action = 'Mise à jour de l\'utilisateur';
-      $affichage = 'value';
-
-      $v_action = 'updated';
-      $idu = $_GET['idu'];
-      $utilisateur = ModelUtilisateur::select($idu);
-      $login = $utilisateur->getLogin();
-      $u_login = htmlspecialchars($utilisateur->getLogin());
-      $u_nom = htmlspecialchars($utilisateur->getNom());
-      $u_prenom = htmlspecialchars($utilisateur->getPrenom());
-      $u_email = htmlspecialchars($utilisateur->getEmail());
-      $v_admin = '<input type="hidden" name="idu" value="'.$idu.'">';
-
-      if (Session::isUser($login)||Session::isAdmin()){
-        if ($utilisateur != false) {
-          //paramètres de la vue désirée
-          $view = 'createupdate';
-          $pagetitle = 'Modifiez votre compte';
-          $controller = 'utilisateur';
-          //redirige vers la vue
-          require File::build_path(array('view', 'view.php'));
+      if (isset($_GET['idu'])) {
+        $idu = $_GET['idu'];
+        $utilisateur = ModelUtilisateur::select($idu);
+        if ($utilisateur == false) {
+          self::error('noUser');
         } else {
-          self::error();
+        $login = $utilisateur->getLogin();
+        $lastmdp = $utilisateur->getMdp();
+        if (isset($_GET['password'])&&$_GET['password']=='modifier') {
+          $nom_action = 'Modification du mot de passe';
+
+          $v_action = 'updated';
+
+          $v_admin = '<input type="hidden" name="idu" value="'.$idu.'">';
+
+          $u_mdp = $utilisateur->getMdp();
+
+          $html_login = '';
+          $html_nom = '';
+          $html_prenom = '';
+          $html_password = '
+          <p>
+          <label for="lastmdp">Ancien mot de passe</label> :
+          <input type="password" name="lastmdp" id="lastmdp" required/>
+          </p>
+          <p>
+          <label for="mdp">Nouveau mot de passe</label> :
+          <input type="password" name="mdp" id="mdp" required/>
+          </p>
+          <p>
+          <label for="mdp1">Vérification du mot de passep</label> :
+          <input type="password" name="mdp1" id="mdp1" required/>
+          </p>';
+          $html_email = '';
+          $html_admin = '';
+        } else {
+          if (Session::isAdmin()) {
+          $html_admin = '<p>
+            <label for="isAdmin">Admin?</label> :
+            <input type="checkbox" value="1" name="isAdmin" id="isAdmin" />
+          </p>';
+        } else {
+          $html_admin = '';
         }
-    } else {
-      self::error('notConnected');
+        $nom_action = 'Mise à jour de l\'utilisateur';
+        $affichage = 'value';
+
+        $v_action = 'updated';
+        
+        $u_login = $utilisateur->getLogin();
+        $u_nom = $utilisateur->getNom();
+        $u_prenom = $utilisateur->getPrenom();
+        $u_email = $utilisateur->getEmail();
+        $v_admin = '<input type="hidden" name="idu" value="'.$idu.'">';
+
+        $html_login = '
+        <p>
+            <label for="login_id">Login</label> :
+            <input type="text" name="login" id="login"'.$affichage.'="'.$u_login.'" required/>
+        </p>';
+        $html_nom = '
+        <p>
+            <label for="nom">Nom</label> :
+            <input type="text" name="nom" id="nom" '.$affichage.'="'.$u_nom.'"  required/>
+        </p>';
+         $html_prenom = '
+         <p>
+            <label for="prenom">Prénom</label> :
+            <input type="text" name="prenom" id="prenom" '.$affichage.'="'.$u_prenom.'"  required/>
+        </p>';
+        $html_password ='';
+        $html_email = '
+        <p>
+            <label for="email">email</label> :
+            <input type="email" '.$affichage.'="'.$u_email.'" name="email" id="email" required/>
+        </p>';
+        }
+        if (Session::isUser($login)||Session::isAdmin()){
+            //paramètres de la vue désirée
+            $view = 'createupdate';
+            $pagetitle = 'Modifiez votre compte';
+            $controller = 'utilisateur';
+            //redirige vers la vue
+            require File::build_path(array('view', 'view.php'));
+        } else {
+          self::error('notConnected');
+        }
+        }
+      } else {
+        self::error('noIdu');
       }
     }
 
@@ -366,34 +441,63 @@ class controllerUtilisateur {
     }
 
     public static function updated() {
-    //stock dans des variables les valeurs de l'url
       $idu = $_GET['idu'];
-      $login = $_GET['login'];
-      $nom = $_GET['nom'];
-      $prenom = $_GET['prenom'];
-      $email = $_GET['email'];
-      $mdp = $_GET['mdp'];
-      $mdp1 = $_GET['mdp1'];
-      if (isset($_GET['isAdmin'])) {
-        $isAdmin = $_GET['isAdmin'];
+      if (isset($_GET['mdp'])) {
+        $mdp = $_GET['mdp'];
+        $mdp1 = $_GET['mdp1'];
+        $lastmdp = $_GET['lastmdp'];
+        $utilisateur = ModelUtilisateur::select($idu);
+        if ($utilisateur== false) {
+          self::error('noUser');
+        } else {
+          $lastmdp1 = $utilisateur->getMdp();
+          if (Session::isUser($utilisateur)||Session::isAdmin()){
+            $mdp = self::chiffrer($mdp);
+            $mdp1 = self::chiffrer($mdp1);
+            $lastmdp = self::chiffrer($lastmdp);
+            $data = array(
+              "idu" => $idu,
+              "mdp" => $mdp,
+            );
+            if ($lastmdp1 == $lastmdp) {
+              if ($mdp == $mdp1) {
+                $utilisateur = ModelUtilisateur::update($data);
+                $utilisateurs = ModelUtilisateur::selectAll();
+                $view = 'updated';
+                $controller = 'utilisateur';
+                $pagetitle = 'Modifications réussies';
+                require File::build_path(array("view", "view.php"));
+              } else {
+                self::error('diffPassword');
+              }
+            } else {
+              self::error('diffLastPassword');
+            }
+          }
+        }
       } else {
-        $isAdmin = 0;
-      }
-      $utilisateur = ModelUtilisateur::select($idu);
-      $test = $utilisateur->getLogin();
-      if (Session::isUser($test)||Session::isAdmin()){
-        $mdp = self::chiffrer($mdp);
-        $mdp1 = self::chiffrer($mdp1);
-        $data = array(
-          "idu" => $idu,
-          "login" => $login,
-          "nom" => $nom,
-          "prenom" => $prenom,
-          "email" => $email,
-          "mdp" => $mdp,
-          "isAdmin" => $isAdmin,
-        );
-        if ($mdp == $mdp1) {
+        //stock dans des variables les valeurs de l'url
+        $login = $_GET['login'];
+        $nom = $_GET['nom'];
+        $prenom = $_GET['prenom'];
+        $email = $_GET['email'];
+        if (isset($_GET['isAdmin'])) {
+          $isAdmin = $_GET['isAdmin'];
+        } else {
+          $isAdmin = 0;
+        }
+        $utilisateur = ModelUtilisateur::select($idu);
+        $test = $utilisateur->getLogin();
+        if (Session::isUser($test)||Session::isAdmin()){
+          $data = array(
+            "idu" => $idu,
+            "login" => $login,
+            "nom" => $nom,
+            "prenom" => $prenom,
+            "email" => $email,
+            "isAdmin" => $isAdmin,
+          );
+        
           $utilisateur = ModelUtilisateur::update($data);
           if ($utilisateur == false) {
             self::error();
@@ -403,10 +507,10 @@ class controllerUtilisateur {
             $controller = 'utilisateur';
             $pagetitle = 'Modifications réussies';
             require File::build_path(array("view", "view.php"));
-              }
           }
-      } else {
-        self::error('notConnected');
+        } else {
+          self::error('notConnected');
+        }
       }
     }
 

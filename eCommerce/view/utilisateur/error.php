@@ -10,4 +10,8 @@ if($typeError == "samePassword") echo 'Le mot de passe est le même que l\'ancie
 
 if($typeError == "emptyCase") echo "Il faut remplir tous les champs !";
 
+if($typeError == "notConnected") echo "Il faut être admin ou connecté avec le compte lié à cette page pour y acceder!";
+
+if($typeError == "isNotAdmin") echo "Il faut être admin pour acceder à cette page!";
+
 ?>

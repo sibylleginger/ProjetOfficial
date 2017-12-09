@@ -10,6 +10,7 @@ echo "<ul> <li>Identifiant : ".$u_idu."</li>";
 echo "<li>Login : ".$u_login."</li>";
 echo "<li>Nom : ".$u_nom."</li>";
 echo "<li>Prenom : ".$u_prenom."</li></ul>";
+echo $html_admin;
 
 echo '<p><a href="index.php?action=delete&controller=utilisateur&idu='
     . $id . '" > supprimer</a> <a href="index.php?action=update&controller=utilisateur&idu='

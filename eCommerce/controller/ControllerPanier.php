@@ -24,7 +24,15 @@ class ControllerPanier {
         
       } else {
         $panier = unserialize($_COOKIE['panier']); //on recupere les données du cookie
-        $ligneProduit = array_search($idp, $panier);
+        foreach ($panier as $peluche) {
+          $count = 0;
+          $ligneProduit = array_search($idp, $peluche['idp']);
+          if ($ligneProduit != false) { //si^peluche existe deja
+            $panier[$count]['nbp'] = $panier[$count]['nbp'] + 1; //qté + 1
+            header('location:index.php?action=readAll&controller=panier');//affichage panier
+          }
+          $count++;
+        }
         //si la peluche n'est pas déjà présente
         if($ligneProduit == false) {
           $nbp = 1;
@@ -34,7 +42,6 @@ class ControllerPanier {
           header('location:index.php?action=readAll&controller=panier');//affichage panier
 
         } else { //si la peluche est deja dans le panier
-          $panier['nbp'] = $panier['nbp'] + 1; //qté + 1
         }
       }
       

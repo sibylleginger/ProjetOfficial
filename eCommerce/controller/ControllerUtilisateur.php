@@ -213,7 +213,7 @@ class controllerUtilisateur {
         <p>
         <label for="mdp1">Vérification du mdp</label> :
         <input type="password" name="mdp1" id="mdp1" required/>
-        </p>'
+        </p>';
 
 
       $v_action = 'created';

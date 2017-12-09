@@ -39,28 +39,35 @@ class ControllerPeluche {
     }
 
     public static function create() {
-        //paramètres de la vue désirée
-        $view = 'create';
-        $pagetitle = 'Nouvelle peluche';
-        $controller = 'peluche';
-        //redirige vers la vue
-        require File::build_path(array('view', 'view.php'));
+        if (Session::isAdmin()) {
+            //paramètres de la vue désirée
+            $view = 'create';
+            $pagetitle = 'Nouvelle peluche';
+            $controller = 'peluche';
+            //redirige vers la vue
+            require File::build_path(array('view', 'view.php'));
+        } else {
+            ControllerUtilisateur::error('isNotAdmin');
+        }  
     }
 
     public static function created() {
-        // stockage les valeurs de l'url
-        $data = array(
+        if (Session::isAdmin()) {
+            $data = array(
             "nom" => $_GET['nom'],
             "couleur" => $_GET['couleur'],
             "prix" => $_GET['prix'],
             "description" => $_GET['description'],
             "taille" => $_GET['taille']
-        );
-        //création de la peluche avec les valeurs
-        //sauvegarde de la peluche dans la Base de Données
-        $peluche = ModelPeluche::save($data);
-        require File::build_path(array('view', 'peluche', 'created.php'));
-        self::readAll();
+            );
+            //création de la peluche avec les valeurs
+            //sauvegarde de la peluche dans la Base de Données
+            $peluche = ModelPeluche::save($data);
+            require File::build_path(array('view', 'peluche', 'created.php'));
+            self::readAll();
+        } else {
+            ControllerUtilisateur::error('isNotAdmin');
+        }
     }
 
     public static function delete() {

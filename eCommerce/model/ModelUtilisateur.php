@@ -15,6 +15,7 @@ class ModelUtilisateur extends Model{
   private $mdp;
   private $email;
   private $isAdmin;
+  private $nonce;
 
   //un getter de idu
   public function getIdu() {
@@ -46,6 +47,16 @@ class ModelUtilisateur extends Model{
     return $this->prenom;
   }
 
+  //un setter de mdp
+  public function setMdp($mdp) {
+    $this->mdp = $mdp;
+  }
+
+  //un getter de mdp
+  public function getMdp() {
+    return $this->mdp;
+  }
+
   //un setter de prenom
   public function setPrenom($prenom) {
     $this->prenom = $prenom;
@@ -71,6 +82,16 @@ class ModelUtilisateur extends Model{
     $this->isAdmin = $prenom;
   }
 
+  //un getter de nonce
+  public function getNonce() {
+    return $this->nonce;
+  }
+
+  //un setter de nonce
+  public function setNonce($nonce) {
+    $this->nonce = $nonce;
+  }
+
   //controller
   public function __construct($l = NULL, $n = NULL, $p = NULL, $d = NULL) {
     if (!is_null($l) && !is_null($n) && !is_null($p) && !is_null($d)) {
@@ -83,7 +104,7 @@ class ModelUtilisateur extends Model{
 
   public static function checkData($data) {
     try {
-      $sql = "SELECT idu, login, nom, prenom, mdp, email, isAdmin, nonce FROM Utilisateur WHERE login =:login;";
+      $sql = "SELECT * FROM Utilisateur WHERE login =:login;";
       $req_prep = Model::$pdo->prepare($sql);
       $values = array(
         "login" => $data
@@ -92,8 +113,8 @@ class ModelUtilisateur extends Model{
       $req_prep->execute($values);
       // On récupère les résultats
       $req_prep->setFetchMode(PDO::FETCH_CLASS, 'ModelUtilisateur');
-      $data = $req_prep->fetchAll();
-      return $data;
+      $tab_data = $req_prep->fetchAll();
+      return $tab_data;
     } catch (Exception $e) {
       return false;
     }

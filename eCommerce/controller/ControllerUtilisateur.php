@@ -1,5 +1,6 @@
 <?php
 require_once File::build_path(array('model', 'ModelUtilisateur.php')); // chargement du modèle
+require_once File::build_path(array('lib', 'Session.php')); // chargement du modèle
 
 class controllerUtilisateur {
 
@@ -23,21 +24,26 @@ class controllerUtilisateur {
     $mdp = $_GET['mdp'];
     //stock dans un tableau les données de l'utilisateur avec le login de l'url
     $utilisateur = ModelUtilisateur::checkData($login);
-    echo $utilisateur['mdp'];
     if ($utilisateur != false) {
-      $mdp = self::chiffrer($_GET['mdp']);
-      if ($utilisateur['mdp'] == $mdp  && $utilisateur['nonce']=='') {  
-      //Connexion ok
-        $_SESSION['idu'] = $utilisateur['idu'];
-        $_SESSION['login'] = $utilisateur['login'];
-        $_SESSION['nom'] = $utilisateur['nom'];
-        $_SESSION['prenom'] = $utilisateur['prenom'];
-        $_SESSION['email'] = $utilisateur['email'];
-        $_SESSION['isAdmin'] = $utilisateur['isAdmin'];
-        $_SESSION['message'] = '<h3> Bienvenue ' . $_SESSION['prenom'] . ' ' . $_SESSION['nom'] . '</h3>';
-        $pagetitle = "Bienvenue !";
+      $idu = $utilisateur[0]->getIdu();
+      $mdp = self::chiffrer($mdp);
+      if ($utilisateur[0]->getMdp() == $mdp  /*&& $utilisateur[0]->getNonce()==''*/) {
+        if (isset($_SESSION['login'])) {
+          $_SESSION['message'] = '<h3> Vous êtes déjà connecté.</h3> ';
+          $pagetitle = "Connected";
+        } else {
+        //Connexion ok
+          $_SESSION['idu'] = $utilisateur[0]->getIdu();
+          $_SESSION['login'] = $utilisateur[0]->getLogin();
+          $_SESSION['nom'] = $utilisateur[0]->getNom();
+          $_SESSION['prenom'] = $utilisateur[0]->getPrenom();
+          $_SESSION['email'] = $utilisateur[0]->getEmail();
+          $_SESSION['isAdmin'] = $utilisateur[0]->getisAdmin();
+          $_SESSION['message'] = '<h3> Bienvenue ' . $_SESSION['prenom'] . ' ' . $_SESSION['nom'] . '</h3><li>Identifiant : '.$_SESSION['idu']."</li><li>Login : ".$_SESSION['login']."</li><li>Email : ".$_SESSION['email']."</li>";
+          $pagetitle = "Bienvenue !";
+        }
       } else {
-        $_SESSION['message'] = '<h3> Mot de passe incorrect. </h3>';
+        $_SESSION['message'] = '<h3> Mot de passe incorrect. </h3><a href="index.php?action=connexion&controller=utilisateur">Se connecter à nouveau</a>';
         $pagetitle = "Mot de passe incorrect";
       }
     } else {
@@ -54,6 +60,7 @@ class controllerUtilisateur {
     session_unset();
     session_destroy();
     setcookie(session_name(), '', time() - 1);
+    echo "Vous êtes déconnecté";
     ControllerPeluche::readAll();
   }
 
@@ -71,9 +78,9 @@ class controllerUtilisateur {
     }
     if (($data) != false) {
       try {
-        $sql2 = "SELECT nonce FROM clients WHERE loginClient = :login; ";
+        $sql2 = "SELECT nonce FROM Utilisateur WHERE login = :login; ";
         $req_prep2 = Model::$pdo->prepare($sql2);
-        $values2 = array("login" => $data['loginClient']);
+        $values2 = array("login" => $data['login']);
         $req_prep2->execute($values2);
         $data2 = $req_prep2->fetch();
       } catch (Exception $e) {
@@ -82,7 +89,7 @@ class controllerUtilisateur {
       if ($data2 != false)
         if (strcmp($data2[0],$nonce)==0) {
           try{
-            $sql = "UPDATE clients SET nonce='' WHERE loginClient = :login; ";
+            $sql = "UPDATE Utilisateur SET nonce='' WHERE login = :login; ";
             $req_prep = Model::$pdo->prepare($sql);
             $values = array("login" => $data[0]);
             $req_prep->execute($values);
@@ -90,19 +97,19 @@ class controllerUtilisateur {
             return false;
           }
           $view = "estConnecte";
-          $controller = "client";
+          $controller = "utilisateur";
           $pagetitle = "Bienvenue";
           $_SESSION['message'] = "Vous etes bien inscrit !";
           require File::build_path(array('view', 'view.php'));
         } else {
           $view = "estConnecte";
-          $controller = "client";
+          $controller = "utilisateur";
           $pagetitle = "Probleme d'authentification.";
           $_SESSION['message'] = "Il y a un probleme lors de votre confirmation de mail";
           require File::build_path(array('view', 'view.php'));
         } else {
           $view = "estConnecte";
-          $controller = "client";
+          $controller = "utilisateur";
           $pagetitle = "Probleme d'authentification.";
           $_SESSION['message'] = "Il y a un probleme avec votre code de confirmation.";
           require File::build_path(array('view', 'view.php'));
@@ -120,6 +127,7 @@ class controllerUtilisateur {
         $texte_chiffre = $texte_chiffre . $complement;
         return $texte_chiffre;
     }
+
     static function generateRandomHex() {
         // Generate a 32 digits hexadecimal number
         $numbytes = 16; // Because 32 digits hexadecimal = 16 bytes
@@ -149,21 +157,50 @@ class controllerUtilisateur {
       if (isset($_GET['idu'])) {
         $idu_query = $_GET['idu'];
         $utilisateur = ModelUtilisateur::select($idu_query);
-        //paramètres de la vue désirée
-        $view = 'detail';
-        $pagetitle = 'Notre utilisateur';
-        $controller = 'utilisateur';
-        //redirige vers la vue 
-        require File::build_path(array('view', 'view.php'));
+        $login = $utilisateur->getLogin();
+        $isAdmin = $utilisateur->getisAdmin();
+        if (Session::isUser($login)||Session::isAdmin()) {
+          if ($isAdmin == 1) {
+            $html_admin = 'Cet utilisateur est un administrateur';
+          } else {
+            $html_admin = '';
+          }
+          //paramètres de la vue désirée
+          $view = 'detail';
+          $pagetitle = 'Notre utilisateur';
+          $controller = 'utilisateur';
+          //redirige vers la vue 
+          require File::build_path(array('view', 'view.php'));
+        } else {
+          self::error('notConnected');
+        }
       } else {
         //fait appel à l'erreur
-        self::erreur(noUser);
+        self::erreur('noUser');
       }
     }
 
     public static function create() {
+      if (Session::isAdmin()) {
+        $html_admin = '<p>
+          <label for="nom">Admin?</label> :
+          <input type="checkbox" value="1" name="nom" id="nom" />
+        </p>';
+      } else {
+        $html_admin = '';
+      }
+      $nom_action = 'Création de l\'utilisateur';
+      $affichage = 'placeholder';
+
+      $u_login = 'Ex : ColonelMoutarde';
+      $u_nom = 'Ex : Moutarde';
+      $u_prenom = 'Ex : Corentin';
+      $u_email = 'Ex : Corentin.moutarde@gamil.com';
+      $v_admin = '';
+
+      $v_action = 'created';
     //paramètres de la vue désirée
-      $view = 'create';
+      $view = 'createupdate';
       $pagetitle = 'Inscription';
       $controller = 'utilisateur';
     //redirige vers la vue
@@ -205,7 +242,7 @@ class controllerUtilisateur {
           //l'utilisateur est créé
           $utilisateur = ModelUtilisateur::save($data);
           if ($utilisateur == false) {
-            $message = "Ce client existe déjà";
+            $message = "Cet utilisateur existe déjà";
             $pagetitle = "Erreur";
             //paramètres de la vue désirée
             $view = 'create';
@@ -214,7 +251,7 @@ class controllerUtilisateur {
             //redirection vers la vue
             require File::build_path(array('view', 'view.php'));
           } else {
-            $mail = 'Bonjour, pour finaliser votre inscription veuillez cliquer sur ce lien  <a href="index.php?controller=client&action=validate&login=' . $login . '&nonce=' . $nonce . '">ici</a>';          
+            $mail = 'Bonjour, pour finaliser votre inscription veuillez cliquer sur ce lien  <a href="index.php?controller=utilisateur&action=validate&login=' . $login . '&nonce=' . $nonce . '">ici</a>';          
             mail($email,"Inscription",$mail);
             $message = "Nous venons de vous envoyer un email, veuillez aller sur votre messagerie afin de confirmer votre inscription.";
             $pagetitle = "Inscription";
@@ -240,37 +277,69 @@ class controllerUtilisateur {
     }
 
     public static function update() {
+      if (Session::isAdmin()) {
+        $html_admin = '<p>
+          <label for="isAdmin">Admin?</label> :
+          <input type="checkbox" value="1" name="isAdmin" id="isAdmin" />
+        </p>';
+      } else {
+        $html_admin = '';
+      }
+      $nom_action = 'Mise à jour de l\'utilisateur';
+      $affichage = 'value';
+
+      $v_action = 'updated';
       $idu = $_GET['idu'];
       $utilisateur = ModelUtilisateur::select($idu);
-      if ($utilisateur != false) {
-        //paramètres de la vue désirée
-        $view = 'update';
-        $pagetitle = 'Modifiez votre compte';
-        $controller = 'utilisateur';
-        //redirige vers la vue
-        require File::build_path(array('view', 'view.php'));
-      } else {
-        self::error();
+      $login = $utilisateur->getLogin();
+      $u_login = htmlspecialchars($utilisateur->getLogin());
+      $u_nom = htmlspecialchars($utilisateur->getNom());
+      $u_prenom = htmlspecialchars($utilisateur->getPrenom());
+      $u_email = htmlspecialchars($utilisateur->getEmail());
+      $v_admin = '<input type="hidden" name="idu" value="'.$idu.'">';
+
+      if (Session::isUser($login)||Session::isAdmin()){
+        if ($utilisateur != false) {
+          //paramètres de la vue désirée
+          $view = 'createupdate';
+          $pagetitle = 'Modifiez votre compte';
+          $controller = 'utilisateur';
+          //redirige vers la vue
+          require File::build_path(array('view', 'view.php'));
+        } else {
+          self::error();
+        }
+    } else {
+      self::error('notConnected');
       }
     }
 
     public static function delete() {
     //stockage de l'id de l'utilisateur dans l'url
       $idu = $_GET['idu'];
-    //delete l'utilisateur
-      $utilisateur = ModelUtilisateur::delete($idu);
-    //stock les utilisateurs dans un tableau
-       if ($utilisateur == true) {
-          self::readAll();
-          //paramètres de la vue désirée
-        $view = 'deleted';
-        $pagetitle = 'deleted';
-        $controller = 'utilisateur';
-          //redirige vers la vue
-        require_once File::build_path(array('view', 'view.php'));
-        }
-        else {
-           self::error();
+      $utilisateur = ModelUtilisateur::select($idu);
+      $login = $utilisateur->getLogin();
+      if (Session::isUser($login)||Session::isAdmin()){
+      //delete l'utilisateur
+        $utilisateur = ModelUtilisateur::delete($idu);
+      //stock les utilisateurs dans un tableau
+         if ($utilisateur == true) {
+          if(!Session::isAdmin()){
+            self::deconnected();
+          }
+          $utilisateurs = ModelUtilisateur::selectAll();
+            //paramètres de la vue désirée
+          $view = 'deleted';
+          $pagetitle = 'deleted';
+          $controller = 'utilisateur';
+            //redirige vers la vue
+          require_once File::build_path(array('view', 'view.php'));
+          }
+          else {
+             self::error();
+          }
+        } else {
+          self::error('notConnected');
         }
     }
 
@@ -283,29 +352,40 @@ class controllerUtilisateur {
       $email = $_GET['email'];
       $mdp = $_GET['mdp'];
       $mdp1 = $_GET['mdp1'];
-
-      $mdp = ControllerUtilisateur::chiffrer($mdp);
-      $mdp1 = self::chiffrer($mdp1);
-      $data = array(
-        "idu" => $idu,
-        "login" => $login,
-        "nom" => $nom,
-        "prenom" => $prenom,
-        "email" => $email,
-        "mdp" => $mdp,    
-      );
-      if ($mdp == $mdp1) {
-        $utilisateur = ModelUtilisateur::update($data);
-        if ($utilisateur == false) {
-          self::error();
-        } else {
-          $utilisateurs = ModelUtilisateur::selectAll();
-          $view = 'updated';
-          $controller = 'utilisateur';
-          $pagetitle = 'Modifications réussies';
-          require File::build_path(array("view", "view.php"));
-            }
-        }
+      if (isset($_GET['isAdmin'])) {
+        $isAdmin = $_GET['isAdmin'];
+      } else {
+        $isAdmin = 0;
+      }
+      $utilisateur = ModelUtilisateur::select($idu);
+      $test = $utilisateur->getLogin();
+      if (Session::isUser($test)||Session::isAdmin()){
+        $mdp = self::chiffrer($mdp);
+        $mdp1 = self::chiffrer($mdp1);
+        $data = array(
+          "idu" => $idu,
+          "login" => $login,
+          "nom" => $nom,
+          "prenom" => $prenom,
+          "email" => $email,
+          "mdp" => $mdp,
+          "isAdmin" => $isAdmin,
+        );
+        if ($mdp == $mdp1) {
+          $utilisateur = ModelUtilisateur::update($data);
+          if ($utilisateur == false) {
+            self::error();
+          } else {
+            $utilisateurs = ModelUtilisateur::selectAll();
+            $view = 'updated';
+            $controller = 'utilisateur';
+            $pagetitle = 'Modifications réussies';
+            require File::build_path(array("view", "view.php"));
+              }
+          }
+      } else {
+        self::error('notConnected');
+      }
     }
 
     public static function error($error) {
@@ -313,6 +393,7 @@ class controllerUtilisateur {
       $view = 'error';
       $typeError = $error;
       $controller = 'utilisateur';
+      $pagetitle = 'Error';
         //redirige vers la vue
       require_once File::build_path(array('view', 'view.php'));
     }

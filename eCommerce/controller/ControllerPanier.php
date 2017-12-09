@@ -63,16 +63,16 @@ class ControllerPanier {
     $controller = 'panier';
     $view = 'list';
     $pagetitle = 'Mon Panier';
-    if(isset($_COOKIE['panier'])) {
-      $panier = unserialize($_COOKIE['panier']);
+    if(isset($_COOKIE['panier'])) { //si le panier existe
+      $panier = unserialize($_COOKIE['panier']); //on recupere les donees
       var_dump($_COOKIE);
       var_dump($panier);
     }
-    require File::build_path(array('view', 'view.php'));
+    require File::build_path(array('view', 'view.php')); //affiche panier
   }
 
   public static function removePanier() {
-    setcookie('panier','',-1);
+    setcookie('panier','',-1); //supprimer cookie
     header('location:index.php?action=readAll&controller=panier');
   }
 

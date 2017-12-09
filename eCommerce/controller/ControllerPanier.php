@@ -5,7 +5,6 @@ class ControllerPanier {
 
   public static function addPanier() {
     //Si la peluche n'existe pas
-    echo "aa";
     if(!isset($_GET['idp'])) {
       self::error('noPeluches');
     } else {
@@ -16,26 +15,26 @@ class ControllerPanier {
         //setcookie('panier', serialize(array()), time()+3600);
         //$panier = unserialize($_COOKIE["panier"]);
         //$panier[] = array(
-        $panier[] = array(
+        $panier[] = array( //on ajoute la peluche
           'idp' => $idp,
           'nbp' => $nbp
           );
-        setcookie('panier', serialize($panier), time()+3600);
-        header('location:index.php?action=readAll&controller=panier');
+        setcookie('panier', serialize($panier), time()+3600); //on l'enregistre dans le cookie
+        header('location:index.php?action=readAll&controller=panier'); //affichage panier
         
       } else {
-        $panier = unserialize($_COOKIE['panier']);
+        $panier = unserialize($_COOKIE['panier']); //on recupere les données du cookie
         $ligneProduit = array_search($idp, $panier);
         //si la peluche n'est pas déjà présente
         if($ligneProduit == false) {
           $nbp = 1;
           $peluche = array('idp' => $idp, 'nbp' => $nbp);
-          $panier[]=$peluche;
-          $_COOKIE['panier'] = serialize($panier);
-          self::readAll();
+          $panier[]=$peluche; //ajout peluche
+          $_COOKIE['panier'] = serialize($panier); //on l'enregistre dans le cookie
+          header('location:index.php?action=readAll&controller=panier');//affichage panier
 
-        } else {
-          $panier['nbp'] = $panier['nbp'] + 1;
+        } else { //si la peluche est deja dans le panier
+          $panier['nbp'] = $panier['nbp'] + 1; //qté + 1
         }
       }
       

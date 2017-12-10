@@ -54,7 +54,9 @@
             <i class="material-icons"></i>
         </div>-->
         <div class="mdl-layout__header-row">
-            <span class="android-title mdl-layout-title mdl-typography--text-uppercase">Ma petite peluche</span>
+            <span class="android-title mdl-layout-title mdl-typography--text-uppercase">
+              <a style="color: white; text-decoration: none;" href="index.php?action=readAll">Ma petite peluche</a>
+            </span>
             <!-- Add spacer, to align navigation to the right in desktop -->
             <div class="android-header-spacer mdl-layout-spacer"></div>
             

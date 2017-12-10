@@ -11,6 +11,7 @@ class ModelPeluche extends Model {
 	private $prix;
 	private $description;
 	private $taille;
+	//private $image;
 
 	//un getter de idp
 	public function getIdp() {
@@ -67,6 +68,16 @@ class ModelPeluche extends Model {
 		$this->taille = $taille;
 	}
 
+	//un getter d'image
+	/*public function getImage() {
+		return $this->image;
+	}
+
+	//un setter d'image
+	public function setTaille($image) {
+		$this->image = $image;
+	}*/
+
 	//un constructeur
 	public function __construct($n = NULL, $c = NULL, $p = NULL, $d = NULL, $t = NULL) {
         if (!is_null($n) && !is_null($c) && !is_null($p) && !is_null($d) && !is_null($t)) {
@@ -75,6 +86,7 @@ class ModelPeluche extends Model {
             $this->prix = $p;
             $this->description = $d;
             $this->taille = $t;
+            //$this->image = $i;
         }
     }
 

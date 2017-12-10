@@ -485,11 +485,9 @@ h1{
   width: 140%;
 }
 
-/**** Mobile layout ****/
+/**** Mobile layout ***
 @media (max-width: 900px) {
-  .android-navigation-container {
-    display: none;
-  }
+  
 
   .android-title {
     display: none !important;
@@ -505,7 +503,7 @@ h1{
 
   /* WebViews in iOS 9 break the "~" operator, and WebViews in OS X 10.10 break
      consecutive "+" operators in some cases. Therefore, we need to use both
-     here to cover all the bases. */
+     here to cover all the bases. 
   .android.android-search-box.is-focused ~ .android-mobile-title,
   .android-search-box.is-focused + .android-navigation-container + .android-mobile-title {
     opacity: 0;
@@ -559,5 +557,5 @@ h1{
 
   .android-footer .mdl-mega-footer--bottom-section {
     display: none;
-  }
+  }*/
 }

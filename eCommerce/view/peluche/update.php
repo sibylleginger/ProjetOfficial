@@ -7,35 +7,36 @@
 ?>
 <form method="get" action="index.php">
     <fieldset>
-        <legend>Modifier une peluche : </legend>
+        <h3>Modifier une peluche : </h3>
         <input type='hidden' name='action' value='updated'>
         <input type='hidden' name='idp' value="<?php $id = $_GET['idp']; echo $id;?>">
-        <p>
-            <label for="nom">Nom</label> :
-            <input type="text" value="<?php echo $p_nom; ?>" name="nom" id="nom" required/>
-        </p>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="nom" id="nom" value="<?php echo $p_nom; ?>" required>
+            <label class="mdl-textfield__label" for="nom">Nom</label>
+        </div><br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="couleur" id="couleur" value="<?php echo $p_couleur; ?>" readonly>
+            <label class="mdl-textfield__label" for="couleur">Couleur</label>
+        </div><br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="number" name="prix" id="prix" value="<?php echo $p_prix; ?>" required>
+            <label class="mdl-textfield__label" for="prix">Prix</label>
+        </div><br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <textarea class="mdl-textfield__input" type="text" rows= "2" name="description" id="description" value="<php <?php echo $p_description ?>" required></textarea>
+            <label class="mdl-textfield__label" for="nom">Description</label>
+        </div><br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="taille" name="taille" id="taille" value="<?php echo $p_taille; ?>" readonly>
+            <label class="mdl-textfield__label" for="taille">Taille</label>
+        </div><br>
+        <!--IMAGE-->
 
         <p>
-            <label for="couleur">Couleur</label> :
-            <input type="text" value="<?php echo $p_couleur; ?>" name="couleur" id="couleur" readonly />
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Soumettre">
+                Soumettre
+            </button>
         </p>
-
-        <p>
-            <label for="prix">Prix</label> :
-            <input type="number" step="any" value="<?php echo $p_prix; ?>" name="prix" id="prix" required/>
-        </p>
-
-        <p>
-            <label for="description">Description</label> :
-            <input type="text" value="<?php echo $p_description; ?>" name="description" id="description" required/>
-        </p>
-
-        <p>
-            <label for="taille">Taille</label>
-            <input type="taille" name="taille" value="<?php echo $p_taille; ?>" readonly>
-        </p>
-
-        <p><input type="submit" value="Soumettre" /></p>
 
     </fieldset>
 </form>

@@ -204,35 +204,34 @@ class controllerUtilisateur {
       $v_admin = '';
 
         $html_login = '
-        <p>
-            <label for="login_id">Login</label> :
-            <input type="text" name="login" id="login"'.$affichage.'="Ex : ColonelMoutarde" required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="login" id="login" required>
+            <label class="mdl-textfield__label" for="login">Login</label>
+        </div><br>';
         $html_nom = '
-        <p>
-            <label for="nom">Nom</label> :
-            <input type="text" name="nom" id="nom" '.$affichage.'="Ex : Moutarde"  required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="nom" id="nom" required>
+            <label class="mdl-textfield__label" for="nom">Nom</label>
+        </div><br>';
          $html_prenom = '
-         <p>
-            <label for="prenom">Prénom</label> :
-            <input type="text" name="prenom" id="prenom" '.$affichage.'="Ex : Corentin"  required/>
-        </p>';
-        $html_password ='';
+         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="prenom" id="prenom" required>
+            <label class="mdl-textfield__label" for="prenom">Prénom</label>
+        </div><br>';
         $html_email = '
-        <p>
-            <label for="email">email</label> :
-            <input type="email" '.$affichage.'="Ex : Corentin.moutarde@gamil.com" name="email" id="email" required/>
-        </p>';
-
-      $html_password = '<p>
-        <label for="mdp">mdp</label> :
-        <input type="password" name="mdp" id="mdp" required/>
-        </p>
-        <p>
-        <label for="mdp1">Vérification du mdp</label> :
-        <input type="password" name="mdp1" id="mdp1" required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="email" name="email" id="email" required>
+            <label class="mdl-textfield__label" for="email">Email</label>
+        </div><br>';
+        $html_password = '
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="password" name="mdp" required>
+            <label class="mdl-textfield__label" for="mdp">Mot de passe</label>
+        </div><br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="password" name="mdp1" required>
+            <label class="mdl-textfield__label" for="mdp1">Confirmation du mot de passe</label>
+        </div><br>';
 
 
       $v_action = 'created';
@@ -339,26 +338,20 @@ class controllerUtilisateur {
           $html_nom = '';
           $html_prenom = '';
           $html_password = '
-          <p>
-          <label for="lastmdp">Ancien mot de passe</label> :
-          <input type="password" name="lastmdp" id="lastmdp" required/>
-          </p>
-          <p>
-          <label for="mdp">Nouveau mot de passe</label> :
-          <input type="password" name="mdp" id="mdp" required/>
-          </p>
-          <p>
-          <label for="mdp1">Vérification du mot de passep</label> :
-          <input type="password" name="mdp1" id="mdp1" required/>
-          </p>';
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="password" name="mdp" required>
+              <label class="mdl-textfield__label" for="mdp">Mot de passe</label>
+            </div><br>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="password" name="mdp1" required>
+              <label class="mdl-textfield__label" for="mdp1">Confirmation du mot de passe</label>
+            </div><br>';
           $html_email = '';
           $html_admin = '';
         } else {
           if (Session::isAdmin()) {
-          $html_admin = '<p>
-            <label for="isAdmin">Admin?</label> :
-            <input type="checkbox" value="1" name="isAdmin" id="isAdmin" />
-          </p>';
+          $html_admin = '<label for="isAdmin">Admin?</label> :
+            <input type="checkbox" value="1" name="isAdmin" id="isAdmin">';
         } else {
           $html_admin = '';
         }
@@ -372,28 +365,27 @@ class controllerUtilisateur {
         $u_prenom = $utilisateur->getPrenom();
         $u_email = $utilisateur->getEmail();
         $v_admin = '<input type="hidden" name="idu" value="'.$idu.'">';
-
         $html_login = '
-        <p>
-            <label for="login_id">Login</label> :
-            <input type="text" name="login" id="login"'.$affichage.'="'.$u_login.'" required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="login" id="login" value="'.$u_login.'" required>
+            <label class="mdl-textfield__label" for="login">Login</label>
+        </div><br>';
         $html_nom = '
-        <p>
-            <label for="nom">Nom</label> :
-            <input type="text" name="nom" id="nom" '.$affichage.'="'.$u_nom.'"  required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="nom" id="nom" value="'.$u_nom.'" required>
+            <label class="mdl-textfield__label" for="nom">Nom</label>
+        </div><br>';
          $html_prenom = '
-         <p>
-            <label for="prenom">Prénom</label> :
-            <input type="text" name="prenom" id="prenom" '.$affichage.'="'.$u_prenom.'"  required/>
-        </p>';
+         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="prenom" id="prenom" value="'.$u_prenom.'" required>
+            <label class="mdl-textfield__label" for="prenom">Prénom</label>
+        </div><br>';
         $html_password ='';
         $html_email = '
-        <p>
-            <label for="email">email</label> :
-            <input type="email" '.$affichage.'="'.$u_email.'" name="email" id="email" required/>
-        </p>';
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="email" name="email" id="email" value="'.$u_email.'" required>
+            <label class="mdl-textfield__label" for="email">Email</label>
+        </div><br>';
         }
         if (Session::isUser($login)||Session::isAdmin()){
             //paramètres de la vue désirée

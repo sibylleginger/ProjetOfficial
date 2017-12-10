@@ -1,5 +1,7 @@
 
-<h1> Liste des utilisateurs </h1>
+<h3 style="margin-left:50px"> Liste des utilisateurs </h3>
+
+<ul class="demo-list-icon mdl-list">
 
 <?php
 foreach ($utilisateurs as $u) {
@@ -13,7 +15,10 @@ foreach ($utilisateurs as $u) {
     // rawurlencode sert à ne pas interpréter ce truc
 
     
-    echo '<p> <a href="index.php?action=read&controller=utilisateur&idu='
-    . $uurlIdu . '" >' . $uLogin . '</a> </p>';
+    echo '<li class="mdl-list__item">
+    	<span class="mdl-list__item-primary-content">
+    		<i class="material-icons mdl-list__item-icon">person</i>
+    		<a href="index.php?action=read&controller=utilisateur&idu='. $uurlIdu . '" >' . $uLogin . '</a> </span></li>';
 }
 ?>
+</ul>

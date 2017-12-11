@@ -9,8 +9,8 @@
 }
 .demo-card-square > .mdl-card__title {
   color: #fff;
-  background: url("../images/babar.jpg") bottom right 15% no-repeat #46B6AC;
-  
+  /*background: url("view/images/babar.jpg") center / cover;
+  /* bottom right 15% no-repeat #46B6AC*/
 }
 #grid {
 	display: flex;
@@ -30,14 +30,16 @@ foreach ($tab_p as $p) {
     $purlId = rawurlencode($p->getIdp());
 
     $pDes = htmlspecialchars($p->getDescription());
+
+    $pImage = htmlspecialchars($p->getImage());
     //Attention : Il ne faut pas encoder l’immatriculation déjà échappée pour le HTML. Il faut créer deux variables : 
     //une immatriculation pour le HTML et une pour les URLs.
     // rawurlencode sert à ne pas interpréter ce truc
 
     
     echo '<div class="demo-card-square mdl-card mdl-shadow--2dp">
-	  		<div class="mdl-card__title mdl-card--expand">
-	    		<h2 class="mdl-card__title-text">'. $pNom .'</h2>
+	  		<div class="mdl-card__title mdl-card--expand" style="background: url('.$pImage.') center / contain no-repeat;">
+	    		<h2 class="mdl-card__title-text" style="color:black">'. $pNom .'</h2>
 	  		</div>
 	  		<div class="mdl-card__supporting-text">'. $pDes .'</div>
 	  		<div class="mdl-card__actions mdl-card--border">

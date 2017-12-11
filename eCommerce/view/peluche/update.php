@@ -4,6 +4,7 @@
     $p_prix = htmlspecialchars($peluche->getPrix());
     $p_description = htmlspecialchars($peluche->getDescription());
     $p_taille = htmlspecialchars($peluche->getTaille());
+    $p_image = htmlspecialchars($peluche->getImage());
 ?>
 <style type="text/css">
   form {
@@ -28,14 +29,17 @@
             <label class="mdl-textfield__label" for="prix">Prix</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <textarea class="mdl-textfield__input" type="text" rows= "2" name="description" id="description" value="<php <?php echo $p_description ?>" required></textarea>
+            <textarea class="mdl-textfield__input" type="text" rows= "2" name="description" id="description" value="<?php echo $p_description; ?>" required></textarea>
             <label class="mdl-textfield__label" for="nom">Description</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="taille" name="taille" id="taille" value="<?php echo $p_taille; ?>" readonly>
             <label class="mdl-textfield__label" for="taille">Taille</label>
         </div><br>
-        <!--IMAGE-->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="image" id="image" value="<?php echo $p_image; ?>" required>
+            <label class="mdl-textfield__label" for="image">Image (ex: view/images/nomImage.jpg)</label>
+        </div>
 
         <p>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Soumettre">

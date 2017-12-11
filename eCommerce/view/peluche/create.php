@@ -45,9 +45,11 @@
                   <span class="mdl-radio__label">Géante</span>
                 </label>
             </div>
-
         </div><br>
-        <!--IMAGE-->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" name="image" id="image" required>
+            <label class="mdl-textfield__label" for="image">Image (ex: view/images/nomImage.jpg)</label>
+        </div>
 
         <p>
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Soumettre">

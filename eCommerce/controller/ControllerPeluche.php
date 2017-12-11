@@ -33,7 +33,9 @@ class ControllerPeluche {
                 $p_nom = $peluche->getNom();
                 $p_description = $peluche->getDescription();
                 $p_prix = $peluche->getPrix();
+                $p_couleur = $peluche->getCouleur();
                 $p_taille = $peluche->getTaille();
+                $p_image = $peluche->getImage();
 
 
                 if (Session::isAdmin()) {
@@ -79,7 +81,8 @@ class ControllerPeluche {
                 "couleur" => $_GET['couleur'],
                 "prix" => $prix,
                 "description" => $_GET['description'],
-                "taille" => $_GET['taille']
+                "taille" => $_GET['taille'],
+                "image" => $_GET['image']
                 );
                 //création de la peluche avec les valeurs
                 //sauvegarde de la peluche dans la Base de Données
@@ -132,7 +135,8 @@ class ControllerPeluche {
             "idp" => $_GET['idp'],
             "nom" => $_GET['nom'],
             "prix" => $_GET['prix'],
-            "description" => $_GET['description']
+            "description" => $_GET['description'],
+            "image" => $_GET['image']
         );
         //Met à jour la peluche dans la base de données
         $peluche = ModelPeluche::update($data);

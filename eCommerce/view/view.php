@@ -29,12 +29,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.min.css">
     <link rel="stylesheet" href="./styles/style_nav.css">
-    <link rel="stylesheet" href="./styles/main_style.css">
+    <!--<link rel="stylesheet" href="./styles/main_style.css">-->
     <!-- Material Design Lite -->
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <!-- Material Design icon font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="icon" type="image/png" href="view/images/icon.png" sizes="16x16">
     <style>
     #view-source {
       position: fixed;
@@ -54,6 +55,7 @@
             <i class="material-icons"></i>
         </div>-->
         <div class="mdl-layout__header-row">
+            <img src="view/images/icon.png" height="90%" style="margin: 10px;">
             <span class="android-title mdl-layout-title mdl-typography--text-uppercase">
                 <a style="color: white; text-decoration: none;" href="index.php?action=readAll">Ma petite peluche</a>
             </span>
@@ -75,7 +77,7 @@
                     <a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=readAll" > Accueil </a>';
                 if (Session::isConnected()) {
                     $idu = $_SESSION['idu'];
-                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=read&controller=utilisateur&idu='.$idu.'">Mon Profil</a>';
+                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=read&controller=utilisateur&idu='.$idu.'" style="87.885px">Mon Profil</a>';
                     echo $pannier_readAll;
                     echo $u_readAll;
                     echo $u_disconnect.'</nav></div>';

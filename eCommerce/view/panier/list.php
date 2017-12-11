@@ -28,18 +28,21 @@
       					<td class="mdl-data-table__cell--non-numeric">'.$peluche->getNom().'</td>
       					<td>'.$qte.'</td>
       					<td>'.$prix.'€</td>
-      					<td><a href="index.php?action=removePeluchePanier&controller=panier&idp='.$idp.'"> <img src="view/images/delete.png"> </a></td>
-      					<td style="align-item: center;"><a href="index.php?action=read&idp='.$idp.'&lastqte='.$qte.'" > <img src="view/images/modifier.png"> </a></p></td>
+      					<td><a href="index.php?action=removePeluchePanier&controller=panier&idp='.$idp.'"><img src="view/images/delete.png"> </a></td>
+      					<td style="text-align:center;"><a href="index.php?action=read&idp='.$idp.'&lastqte='.$qte.'" ><img src="view/images/quantite.png" style="margin: auto;"></a></td>
     				</tr>';
 				echo '';
 				echo '';
 				$total = $total+$prix;
 			}
 		}
-		echo '</tbody>
+		//echo '';
+		echo '<tr>
+				<td>Prix total : '.$total. '€</td>
+			</tr>
+			</tbody>
 			</table>
 			<br>';
-		echo 'Prix total : '.$total. '€';
 		echo '<p><a href="index.php?action=readAll">Continuer les achats </a><br>';
 		echo '<a href="index.php?action=removePanier&controller=panier"> Retirer tous les articles du panier</a></p></div>';
 

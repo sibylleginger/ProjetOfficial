@@ -7,7 +7,7 @@ class ControllerPeluche {
         $tab_p = ModelPeluche::selectAll();
         //paramètres de la vue désirée
         $view = 'list';
-        $pagetitle = 'Peluches factory';
+        $pagetitle = 'Ma petite peluche';
         $controller = 'peluche';
         //"redirige" vers la vue
         require File::build_path(array('view', 'view.php'));

@@ -1,48 +1,36 @@
 <?php
-require_once File::build_path(array('model', 'ModelPanier.php')); // chargement du modèle
+require_once File::build_path(array('model', 'ModelPeluche.php'));
+require_once File::build_path(array('lib', 'session.php'));
 
 class ControllerPanier {
 
-  public static function addPanier() {
-    //Si la peluche n'existe pas
-    if(!isset($_GET['idp'])) {
-      self::error('noPeluches');
-    } else {
+  public static function add() {
+    if(isset($_GET['idp']) && isset($_GET['qte'])) {
       $idp = $_GET['idp'];
-      //si le panier est vide
-      if (!isset($_COOKIE['panier'])) {
-        $nbp = 1;
-        //setcookie('panier', serialize(array()), time()+3600);
-        //$panier = unserialize($_COOKIE["panier"]);
-        //$panier[] = array(
-        $panier[] = array( //on ajoute la peluche
-          'idp' => $idp,
-          'nbp' => $nbp
-          );
-        setcookie('panier', serialize($panier), time()+3600); //on l'enregistre dans le cookie
-        header('location:index.php?action=readAll&controller=panier'); //affichage panier
-        
+      $qte = $_GET['qte'];
+      if($qte < 0) {
+        self::error('qte');
       } else {
-        $panier = unserialize($_COOKIE['panier']); //on recupere les données du cookie
-        foreach ($panier as $peluche) {
-          $count = 0;
-          //$ligneProduit = array_search($idp, $peluche['idp']);
-          if ($idp == $peluche['idp']) { //si^peluche existe deja
-            $panier[$count]['nbp'] = $panier[$count]['nbp'] + 1; //qté + 1
-            $_COOKIE['panier'] = serialize($panier); //on l'enregistre dans le cookie
-            header('location:index.php?action=readAll&controller=panier');//affichage panier
+        if(!isset($_SESSION['panier'][$idp])||isset($_GET['lastqte'])) {
+          $_SESSION['panier'][$idp] = $qte;
+          if(isset($_GET['lastqte'])) {
+            $modification = 'La peluche a été mise a jour dans le panier !';
+            $pagetitle = 'Updated';
+          } else {
+            $modification = 'La peluche a été ajoutée au panier !';
+            $pagetitle = 'Added';
           }
-          $count++;
+        } else {
+          $_SESSION['panier'][$idp] += $qte;
+          $modification = 'La peluche étant déjà dans le panier nous avons additionné les quantités !';
+          $pagetitle = 'Added';
         }
-        //si la peluche n'est pas déjà présente
-          $nbp = 1;
-          $peluche = array('idp' => $idp, 'nbp' => $nbp);
-          $panier[]=$peluche; //ajout peluche
-          $_COOKIE['panier'] = serialize($panier); //on l'enregistre dans le cookie
-          header('location:index.php?action=readAll&controller=panier');//affichage panier
-
+        $view = 'updated';
+        $controller = 'panier';
+        require File::build_path(array("view", "view.php"));
       }
-      
+    } else {
+      self::error('noPeluche');
     }
   }
 
@@ -51,39 +39,40 @@ class ControllerPanier {
       self::error('noPeluche');
     } else {
       $idp = $_GET['idp'];
-      $panier = unserialize($_COOKIE['panier']);
-      $panier['nbp'] = $panier['nbp']-1;
-      $_COOKIE['panier'] = $panier;
-      if($panier['nbp'] <=0) {
-        unset($_COOKIE['panier']['idp']);
-      }
-      if(count($_COOKIE['panier']) == 0) {
-        unset($_COOKIE['panier']);
-      }
+      unset($_SESSION['panier'][$idp]);
     }
-    self::readAll();
+    if ($_SESSION['panier'] == null) {
+      unset($_SESSION['panier']);
+    }
+        $modification = 'La peluche a été supprimée au panier !';
+        $view = 'updated';
+        $controller = 'panier';
+        $pagetitle = 'Deleted';
+        require File::build_path(array("view", "view.php"));
   }
 
   public static function readAll() {
     $controller = 'panier';
     $view = 'list';
     $pagetitle = 'Mon Panier';
-    if(isset($_COOKIE['panier'])) { //si le panier existe
-      $panier = unserialize($_COOKIE['panier']); //on recupere les donees
-    }
     require File::build_path(array('view', 'view.php')); //affiche panier
   }
 
   public static function removePanier() {
-    setcookie('panier','',-1); //supprimer cookie
-    header('location:index.php?action=readAll&controller=panier');
+    unset($_SESSION['panier']);
+    $pagetitle = 'Panier';
+    $controller = 'panier';
+    $view = 'list';
+    require File::build_path(array('view', 'view.php'));
   }
 
-  public static function error($error) {
+  public static function error($typeError) {
+      if($typeError == 'badParameter') $error = 'Les paramêtres ne sont pas corrects !';
+      if($typeError == 'qte') $error = 'Vous pouvez commander 0 à 100 peluche(s) !';
         //paramètres de la vue et de l'erreur désirées
       $view = 'error';
-      $typeError = $error;
-      $controller = 'utilisateur';
+      $pagetitle = 'Error';
+      $controller = 'peluche';
         //redirige vers la vue
       require_once File::build_path(array('view', 'view.php'));
     }

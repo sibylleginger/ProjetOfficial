@@ -51,10 +51,9 @@ class ControllerPeluche {
 
 
                 if (Session::isAdmin()) {
-                $html_admin = '<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href=index.php?action=delete&idp='
-                . $id . '" >  Supprimer</a>
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=update&idp='
-                . $id . '" > Modifier</a>';
+                $html_admin = '<br> <a href="index.php?action=delete&idp='
+                . $id . '" > supprimer</a> <a href="index.php?action=update&idp='
+                . $id . '" > modifier</a>';
                 } else {
                     $html_admin = '';
                 }                
@@ -146,6 +145,7 @@ class ControllerPeluche {
                     } else {
                         $tab_p = ModelPeluche::selectAll();
                         $view = 'updated';
+                        $modification = '<h6 style="margin 2px;">La peluche a été créée !</h6>';
                         $controller = 'peluche';
                         $pagetitle = 'Created';
                         require File::build_path(array("view", "view.php"));
@@ -199,11 +199,10 @@ class ControllerPeluche {
                 $html_vaction = "updated";
 
                 $html_legend = "Modifier la peluche";
-                $html_update = '<input type="hidden" name="idp" value="'.$idp.'"><br><input type="hidden" name="lastname" value="'.$p_nom.'">';
+                $html_update = '<input type="hidden" name="idp" value="'.$idp.'">';
                 $html_taille = '
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="taille" name="taille" value="'.$p_taille.'" readonly/>
-                <label class="mdl-textfield__label" for="taille">Taille</label>
                 <label class';
 
                 //paramètres de la vue désirée
@@ -224,7 +223,7 @@ class ControllerPeluche {
         if(Session::isAdmin()) {
             $nom = $_GET['nom'];
             $test = ModelPeluche::redondance('nom', $nom);
-            if($test == true&&$nom!=$_GET['lastname']) {
+            if($test == true) {
                 self::error('nomExistUpdate');
                 } else {
                 //stockage des valeurs de l'url
@@ -240,7 +239,7 @@ class ControllerPeluche {
                     self::error('noPeluche');
                 } else {
                     $tab_p = ModelPeluche::selectAll();
-                    $modification = 'La peluche a été update !';
+                    $modification = '<h6 style="margin:2px;">La peluche a été mise à jour !</h6>';
                     $view = 'updated';
                     $controller = 'peluche';
                     $pagetitle = 'Updated';

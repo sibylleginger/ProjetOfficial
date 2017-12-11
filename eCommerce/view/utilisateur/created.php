@@ -1,6 +1,7 @@
-
-<p>L'utilisateur a bien été créée !</p>
-
+<div style="display: flex;">
+<img src="view/images/fleche.png" height="25px">
+<h6 style="margin: 2px ">L'utilisateur a bien été update !</h6>
+</div>
 <?php
     if (isset($_SESSION['message'])) {
         echo $_SESSION['message'];

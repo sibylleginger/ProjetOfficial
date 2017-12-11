@@ -1,52 +1,52 @@
-
-<h3 style="margin-left:50px"> Nos peluches </h3>
-<!-- Square card -->
-<style>
-.demo-card-square.mdl-card {
-  width: 350px;
-  height: 320px;
-  margin: 10px;
-}
-.demo-card-square > .mdl-card__title {
-  color: #fff;
-  /*background: url("view/images/babar.jpg") center / cover;
-  /* bottom right 15% no-repeat #46B6AC*/
-}
-#grid {
-	display: flex;
-	flex-wrap: wrap;
-	margin: 50px;
-}
-</style>
-<div id="grid">
-
+<div style="margin: 20px 50px;">
+<h1> Votre panier </h1>
 
 <?php
-foreach ($tab_p as $p) {
+	if(!isset($_SESSION['panier'])) {
+		echo "<h3>Votre panier est vide ! </h3>";
+		echo '<a href="index.php?action=readAll">Commencer les achats</a>';
+	}else {
+		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+  				<thead>
+    				<tr>
+      					<th class="mdl-data-table__cell--non-numeric">Nom de la peluche</th>
+      					<th>Quantité</th>
+      					<th>Prix</th>
+      					<th>Retirer</th>
+      					<th>Modifier quantité</th>
+    				</tr>
+  				</thead>
+ 				<tbody>';
+		$total = 0;
+		foreach($_SESSION['panier'] as $idp => $qte){
+			$peluche = ModelPeluche::select($idp);
+			if($peluche == false) {
+				echo "Pas de peluche";
+			} else {
+				$prix = $peluche->getPrix()*$qte;
+				echo '<tr>
+      					<td class="mdl-data-table__cell--non-numeric">'.$peluche->getNom().'</td>
+      					<td>'.$qte.'</td>
+      					<td>'.$prix.'€</td>
+      					<td><a href="index.php?action=removePeluchePanier&controller=panier&idp='.$idp.'"><img src="view/images/delete.png"> </a></td>
+      					<td style="text-align:center;"><a href="index.php?action=read&idp='.$idp.'&lastqte='.$qte.'" ><img src="view/images/quantite.png" style="margin: auto;"></a></td>
+    				</tr>';
+				echo '';
+				echo '';
+				$total = $total+$prix;
+			}
+		}
+		//echo '';
+		echo '<tr>
+				<td>Prix total : '.$total. '€</td>
+			</tr>
+			</tbody>
+			</table>
+			<br>';
+		echo '<p><a href="index.php?action=readAll">Continuer les achats </a><br>';
+		echo '<a href="index.php?action=removePanier&controller=panier"> Retirer tous les articles du panier</a></p></div>';
 
+	}
 
-    $pNom = htmlspecialchars($p->getNom());
-
-    $purlId = rawurlencode($p->getIdp());
-
-    $pDes = htmlspecialchars($p->getDescription());
-
-    $pImage = htmlspecialchars($p->getImage());
-    //Attention : Il ne faut pas encoder l’immatriculation déjà échappée pour le HTML. Il faut créer deux variables : 
-    //une immatriculation pour le HTML et une pour les URLs.
-    // rawurlencode sert à ne pas interpréter ce truc
-
-    
-    echo '<div class="demo-card-square mdl-card mdl-shadow--2dp">
-	  		<div class="mdl-card__title mdl-card--expand" style="background: url('.$pImage.') center / contain no-repeat;">
-	    		<h2 class="mdl-card__title-text" style="color:black">'. $pNom .'</h2>
-	  		</div>
-	  		<div class="mdl-card__supporting-text">'. $pDes .'</div>
-	  		<div class="mdl-card__actions mdl-card--border">
-	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=read&idp='. $purlId . '"> Voir les détails</a>
-	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=add&controller=panier&idp='.$purlId.'&qte=1">Ajouter au panier</a>
-	  		</div>
-		</div> ';
-}
 ?>
-</div>
+

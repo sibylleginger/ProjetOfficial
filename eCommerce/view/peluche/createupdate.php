@@ -21,8 +21,8 @@
             <label class="mdl-textfield__label" for="prix">Prix</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" rows= "2" <?php echo $affichage.'="'.$p_description.'"'; ?> name="description" id="description" required />
-            <label class="mdl-textfield__label" for="description">Description</label>
+            <input class="mdl-textfield__input" type="text" <?php echo $affichage.'="'.$p_description.'"'; ?> name="description" id="description" required></input>
+            <label class="mdl-textfield__label" for="nom">Description</label>
         </div><br>
         <?php
             echo $html_taille;

@@ -36,15 +36,16 @@
 				$total = $total+$prix;
 			}
 		}
-		//echo '';
 		echo '<tr>
-				<td>Prix total : '.$total. '€</td>
+				<td><h6>Prix total : '.$total. '€</h6></td>
 			</tr>
 			</tbody>
 			</table>
 			<br>';
-		echo '<p><a href="index.php?action=readAll">Continuer les achats </a><br>';
-		echo '<a href="index.php?action=removePanier&controller=panier"> Retirer tous les articles du panier</a></p></div>';
+		echo '<div">
+	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=readAll"> Continuer les achats</a>
+	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=removePanier&controller=panier">Retirer tous les articles</a>
+	  		</div>';
 
 	}
 

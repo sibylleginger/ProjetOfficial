@@ -57,7 +57,7 @@ echo '<li class="mdl-list__item">
     </fieldset>
 </form>
 <?php
-echo $html_admin.'<p><a href="index.php?action=readAll"> Retour</a> </p>
-    </ul>
-    </div>';
+echo '<div>';
+echo $html_admin.'<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=readAll"> Retour</a>';
+echo '</div>';
 ?>

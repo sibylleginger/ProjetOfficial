@@ -1,6 +1,11 @@
+<style type="text/css">
+  form {
+    margin: 20px 50px;
+  }
+</style>
 <form method="get" action="index.php">
     <fieldset>
-        <legend>Ajouter une peluche : </legend>
+        <h3>Ajouter une peluche : </h3>
         <input type='hidden' name='action' value='created'>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="text" name="nom" id="nom" required>
@@ -11,7 +16,7 @@
             <label class="mdl-textfield__label" for="couleur">Couleur</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="number" name="prix" id="prix" required>
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="prix" id="prix" required>
             <label class="mdl-textfield__label" for="prix">Prix</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

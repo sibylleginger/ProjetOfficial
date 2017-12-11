@@ -1,3 +1,8 @@
+<style type="text/css">
+  form {
+    margin: 20px 50px;
+  }
+</style>
 <form method="get" action='index.php'>
     <fieldset>
         <h3><?php echo $nom_action; ?> : </h3>

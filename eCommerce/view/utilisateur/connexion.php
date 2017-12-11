@@ -1,3 +1,8 @@
+<style type="text/css">
+  form {
+    margin: 50px;
+  }
+</style>
 <form method="get" action="index.php">
 	<fieldset>
 		<h3>Connexion</h3>

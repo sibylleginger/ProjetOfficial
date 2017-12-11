@@ -5,6 +5,11 @@
     $p_description = htmlspecialchars($peluche->getDescription());
     $p_taille = htmlspecialchars($peluche->getTaille());
 ?>
+<style type="text/css">
+  form {
+    margin: 20px 50px;
+  }
+</style>
 <form method="get" action="index.php">
     <fieldset>
         <h3>Modifier une peluche : </h3>
@@ -19,7 +24,7 @@
             <label class="mdl-textfield__label" for="couleur">Couleur</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="number" name="prix" id="prix" value="<?php echo $p_prix; ?>" required>
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="prix" id="prix" value="<?php echo $p_prix; ?>" required>
             <label class="mdl-textfield__label" for="prix">Prix</label>
         </div><br>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

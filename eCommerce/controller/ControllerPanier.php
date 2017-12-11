@@ -26,8 +26,8 @@ class ControllerPanier {
         $panier = unserialize($_COOKIE['panier']); //on recupere les données du cookie
         foreach ($panier as $peluche) {
           $count = 0;
-          $ligneProduit = array_search($idp, $peluche['idp']);
-          if ($ligneProduit != false) { //si^peluche existe deja
+          //$ligneProduit = array_search($idp, $peluche['idp']);
+          if ($idp == $peluche['idp']) { //si^peluche existe deja
             $panier[$count]['nbp'] = $panier[$count]['nbp'] + 1; //qté + 1
             $_COOKIE['panier'] = serialize($panier); //on l'enregistre dans le cookie
             header('location:index.php?action=readAll&controller=panier');//affichage panier
@@ -35,14 +35,12 @@ class ControllerPanier {
           $count++;
         }
         //si la peluche n'est pas déjà présente
-        if($ligneProduit == false) {
           $nbp = 1;
           $peluche = array('idp' => $idp, 'nbp' => $nbp);
           $panier[]=$peluche; //ajout peluche
           $_COOKIE['panier'] = serialize($panier); //on l'enregistre dans le cookie
           header('location:index.php?action=readAll&controller=panier');//affichage panier
 
-        }
       }
       
     }
@@ -72,8 +70,6 @@ class ControllerPanier {
     $pagetitle = 'Mon Panier';
     if(isset($_COOKIE['panier'])) { //si le panier existe
       $panier = unserialize($_COOKIE['panier']); //on recupere les donees
-      var_dump($_COOKIE);
-      var_dump($panier);
     }
     require File::build_path(array('view', 'view.php')); //affiche panier
   }

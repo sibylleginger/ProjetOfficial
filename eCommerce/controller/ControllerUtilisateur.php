@@ -39,7 +39,15 @@ class controllerUtilisateur {
           $_SESSION['prenom'] = $utilisateur[0]->getPrenom();
           $_SESSION['email'] = $utilisateur[0]->getEmail();
           $_SESSION['isAdmin'] = $utilisateur[0]->getisAdmin();
-          $_SESSION['message'] = '<h3> Bienvenue ' . $_SESSION['prenom'] . ' ' . $_SESSION['nom'] . '</h3><li>Identifiant : '.$_SESSION['idu']."</li><li>Login : ".$_SESSION['login']."</li><li>Email : ".$_SESSION['email']."</li>";
+          $_SESSION['message'] = '<h3 style="margin: 20px;"> Bienvenue ' . $_SESSION['prenom'] . ' ' . $_SESSION['nom'] . '</h3><li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">Identifiant : '.$_SESSION['idu'].'</span>
+            </li>
+            <li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">Login : '.$_SESSION['login'].'</span>
+            </li>
+            <li class="mdl-list__item">
+              <span class="mdl-list__item-primary-content">Email : '.$_SESSION['email'].'</span>
+            </li>';
           $pagetitle = "Bienvenue !";
         }
       } else {

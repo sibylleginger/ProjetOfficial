@@ -22,7 +22,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Introducing Lollipop, a sweet new take on Android.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Ma petite peluche</title>
+    <title><?php echo $pagetitle; ?></title>
 
     <!-- Page styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
@@ -51,9 +51,6 @@
     <body>
 
     <div class="android-header mdl-layout__header mdl-layout__header--waterfall">
-        <!--<div aria-expanded="false" id="burgerlink" role="button" tabindex="0" class="mdl-layout__drawer-button" onclick="toggle('burger', 'burgerlink')">
-            <i class="material-icons"></i>
-        </div>-->
         <div class="mdl-layout__header-row">
             <img src="view/images/icon.png" height="90%" style="margin: 10px;">
             <span class="android-title mdl-layout-title mdl-typography--text-uppercase">
@@ -75,10 +72,10 @@
                 echo '<div class="android-navigation-container">
                     <nav class="android-navigation mdl-navigation">
                     <a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=readAll" > Accueil </a>';
+                echo $pannier_readAll;
                 if (Session::isConnected()) {
                     $idu = $_SESSION['idu'];
-                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=read&controller=utilisateur&idu='.$idu.'" style="87.885px">Mon Profil</a>';
-                    echo $pannier_readAll;
+                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=read&controller=utilisateur&idu='.$idu.'">Mon Profil</a>';
                     echo $u_readAll;
                     echo $u_disconnect.'</nav></div>';
                     if (Session::isAdmin()) {
@@ -96,7 +93,7 @@
                     }
                 } else {
                     echo $u_connexion;
-                    echo $u_create.'</nav></div>';
+                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=create&controller=utilisateur" >Inscription</a></nav></div>';
                     
                 }
                 echo

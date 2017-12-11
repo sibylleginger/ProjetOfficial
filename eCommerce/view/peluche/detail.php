@@ -38,8 +38,25 @@ echo '<li class="mdl-list__item">
  echo '<li class="mdl-list__item">
   		<span class="mdl-list__item-primary-content">Taille : '.$p_taille.'</span>
   	</li>';
+?>
+<form method="get" action="index.php">
+    <fieldset>
+        <legend><?php echo $html_legend; ?> : </legend>
+        <input type='hidden' name='action' value='add'>
+        <input type='hidden' name='controller' value='panier'>
+        <input type='hidden' name='idp' value=<?php echo $p_idp; ?> >
+        <?php echo $html_hidden; ?>
+        <p>
+            <label for="qte">Quantité</label> :
+            <input type="number" value=<?php echo $html_value; ?> min="0" max="100" name="qte" id="qte" required/>
+        </p>
 
-echo $html_admin.'<p><a href="index.php?action=addPanier&controller=panier&idp='.$id.'">Ajouter au panier</a><br><a href="index.php?action=readAll"> Retour</a> </p>
+        <p><input type="submit" value=<?php echo $html_submit; ?> /></p>
+
+    </fieldset>
+</form>
+<?php
+echo $html_admin.'<p><a href="index.php?action=readAll"> Retour</a> </p>
     </ul>
     </div>';
 ?>

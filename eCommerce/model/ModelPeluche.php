@@ -73,11 +73,6 @@ class ModelPeluche extends Model {
 		return $this->image;
 	}
 
-	//un setter d'image
-	/*public function setTaille($image) {
-		$this->image = $image;
-	}*/
-
 	//un constructeur
 	public function __construct($n = NULL, $c = NULL, $p = NULL, $d = NULL, $t = NULL, $i = NULL) {
         if (!is_null($n) && !is_null($c) && !is_null($p) && !is_null($d) && !is_null($t) && !is_null($i)) {

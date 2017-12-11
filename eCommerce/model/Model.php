@@ -3,31 +3,31 @@
 
 require_once File::build_path(array("config","conf.php"));
 Class Model {
-	
-	public static $pdo;
+    
+    public static $pdo;
 
 
-	public static function init(){
-		$hostname=Conf::getHostname();
-		$dbname=Conf::getDatabase();
-		$login=Conf::getLogin();
-		$password=Conf::getPassword();
-		
-		try{
-			self::$pdo = new PDO("mysql:host=$hostname;dbname=$dbname",$login,$password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-			
-			// Activate the error display option of PDO, 
-			// and now PDO will raise an exception in case of problems
-			self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public static function init(){
+        $hostname=Conf::getHostname();
+        $dbname=Conf::getDatabase();
+        $login=Conf::getLogin();
+        $password=Conf::getPassword();
+        
+        try{
+            self::$pdo = new PDO("mysql:host=$hostname;dbname=$dbname",$login,$password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+            
+            // Activate the error display option of PDO, 
+            // and now PDO will raise an exception in case of problems
+            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-			//self::$pdo=new PDO('mysql:host='.Conf::getHostname().';dbname='.Conf::getDatabase().';'.Conf::getLogin().';'.Conf::getPassword().'; array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));');
-		} catch(PDOException $e) {
-  			echo $e->getMessage(); // affiche un message d'erreur
-  			die();
-  		}
+            //self::$pdo=new PDO('mysql:host='.Conf::getHostname().';dbname='.Conf::getDatabase().';'.Conf::getLogin().';'.Conf::getPassword().'; array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));');
+        } catch(PDOException $e) {
+            echo $e->getMessage(); // affiche un message d'erreur
+            die();
+        }
 
-  	}
+    }
 
     /* ////////////////////////////////////////
       ////             Fonctions           ////
@@ -37,23 +37,23 @@ Class Model {
     public static function select($primary_value) {
         // Préparation de la requête
         try{
-        	//sélection de la table en fonction du sous model
+            //sélection de la table en fonction du sous model
            $table_name = ucfirst(static::$object);
-	        //stock dans une variable le sous model
+            //stock dans une variable le sous model
            $class_name = "Model" . ucfirst(static::$object);
-	        //stock dans une variable la clé primaire de la table
+            //stock dans une variable la clé primaire de la table
            $primary_key = static::$primary;
-	        //stock dans une variable la requête en fonction des variable ci-dessus
+            //stock dans une variable la requête en fonction des variable ci-dessus
            $sql = "SELECT * FROM $table_name WHERE $primary_key=:id_tag";
-	        //prépare la requête
+            //prépare la requête
            $req_prep = Model::$pdo->prepare($sql);
-	        //remplace l'id_tag par sa valeur (clé primaire)
+            //remplace l'id_tag par sa valeur (clé primaire)
            $values = array("id_tag" => $primary_value);
-	        //exécute la requête
+            //exécute la requête
            $req_prep->execute($values);
-	        //transforme la réponse en objet de la classe
+            //transforme la réponse en objet de la classe
            $req_prep->setFetchMode(PDO::FETCH_CLASS, $class_name);
-	        //stock la réponse objet dans un tableau
+            //stock la réponse objet dans un tableau
            $tab = $req_prep->fetchAll();
        }catch(Exception $e){
             return false;
@@ -68,19 +68,19 @@ Class Model {
     //sélectionne tous les objets
     public static function selectAll() {
         try {
-            	//sélection de la table en fonction du sous model
+                //sélection de la table en fonction du sous model
            $table_name = ucfirst(static::$object);
-    	        //stock dans une variable le sous model
+                //stock dans une variable le sous model
            $class_name = "Model" . ucfirst(static::$object);
-    	        //stock dans une variable la requête en fonction de la variable ci-dessus
+                //stock dans une variable la requête en fonction de la variable ci-dessus
            $sql = "SELECT * FROM $table_name ;";
-    	        //prépare la requête
+                //prépare la requête
            $rep = Model::$pdo->query($sql);
-    	        //transforme la réponse en objet de la classe
+                //transforme la réponse en objet de la classe
            $tab_obj = $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
-    	        //stock la réponse objet dans un tableau
+                //stock la réponse objet dans un tableau
            $tab = $rep->fetchAll();
-               	//stock la réponse objet dans un tableau
+                //stock la réponse objet dans un tableau
            return $tab;
 
         } catch (Exception $ex) {
@@ -90,11 +90,11 @@ Class Model {
 
     public static function save($data) {
         try {
-            	//sélection de la table en fonction du sous model
+                //sélection de la table en fonction du sous model
             $table_name = ucfirst(static::$object);
-    	        //stock dans une variable le sous model
+                //stock dans une variable le sous model
             $class_name = "Model" . ucfirst(static::$object);
-    	        //stock dans une variable la requête en fonction de la variable ci-dessus
+                //stock dans une variable la requête en fonction de la variable ci-dessus
             $sql = "INSERT INTO $table_name (";
                 //chaque nom des colonnes du tableau entrant est entré dans la requète
             foreach ($data as $cle => $valeur) {
@@ -108,22 +108,22 @@ Class Model {
             }
             $sql = rtrim($sql, ',');
             $sql = $sql . ");";
-        	        //prépare la requête
+                    //prépare la requête
             $req_prep = Model::$pdo->prepare($sql);
                     //execute la requête
             $req_prep->execute($data);
                     //data saved
             return true;
         } catch (Exception $ex) {
-            	//data not saved = error
+                //data not saved = error
             return false;
         }
     }
     public static function delete($primary_value) {
         try{
-            	//sélection de la table en fonction du sous model
+                //sélection de la table en fonction du sous model
             $table_name = ucfirst(static::$object);
-    	        //sotck dans une variable la clé primaire de l'objet
+                //sotck dans une variable la clé primaire de l'objet
             $primary_key = static::$primary;
                 //stock dans une variable dans une requête sql
             $sql = "DELETE FROM $table_name WHERE $primary_key = :id";
@@ -136,7 +136,7 @@ Class Model {
                 //object deleted
             return true;
         } catch (Exception $ex) {
-            	//object not saved
+                //object not saved
             return false;
         }
     }
@@ -145,7 +145,7 @@ Class Model {
         try {
                 //sotck dans une variable la clé primaire de l'objet
             $primary_key = static::$primary;
-            	//sélection de la table en fonction du sous model
+                //sélection de la table en fonction du sous model
             $table_name = ucfirst(static::$object);
                 //stock dans une variable dans une requête sql
             $sql = "UPDATE $table_name SET ";
@@ -163,7 +163,7 @@ Class Model {
                 //object updated
             return true;
         } catch (Exception $ex) {
-                	//object not updated
+                    //object not updated
             return false;
         }
     }

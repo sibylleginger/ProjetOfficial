@@ -28,13 +28,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.min.css">
-    <link rel="stylesheet" href="./styles/style_nav.css">
     <!--<link rel="stylesheet" href="./styles/main_style.css">-->
     <!-- Material Design Lite -->
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <!-- Material Design icon font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles/style_nav.css">
     <link rel="icon" type="image/png" href="view/images/icon.png" sizes="16x16">
     <style>
     #view-source {
@@ -63,19 +63,19 @@
                 //stockage des liens dans des variables
                 $p_create = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: grey;" href="index.php?action=create">Créer Peluche</a>';
                 $u_create = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: grey;" href="index.php?action=create&controller=utilisateur">Créer utilisateur</a>';
-                $u_connexion = '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=connexion&controller=utilisateur">Connexion</a>';
-                $u_disconnect = '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=deconnected&controller=utilisateur">Déconnexion</a>';
-                $u_readAll = '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=readAll&controller=utilisateur">Utilisateurs</a>';
-                $pannier_readAll = '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=readAll&controller=panier">Panier</a>';
+                $u_connexion = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=connexion&controller=utilisateur">Connexion</a>';
+                $u_disconnect = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=deconnected&controller=utilisateur">Déconnexion</a>';
+                $u_readAll = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=readAll&controller=utilisateur">Utilisateurs</a>';
+                $pannier_readAll = '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=readAll&controller=panier">Panier</a>';
                 //debut du nav
                 //onglet disponible pour tous
                 echo '<div class="android-navigation-container">
                     <nav class="android-navigation mdl-navigation">
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=readAll" > Accueil </a>';
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=readAll" > Accueil </a>';
                 echo $pannier_readAll;
                 if (Session::isConnected()) {
                     $idu = $_SESSION['idu'];
-                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=read&controller=utilisateur&idu='.$idu.'">Mon Profil</a>';
+                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=read&controller=utilisateur&idu='.$idu.'">Mon Profil</a>';
                     echo $u_readAll;
                     echo $u_disconnect.'</nav></div>';
                     if (Session::isAdmin()) {
@@ -93,7 +93,7 @@
                     }
                 } else {
                     echo $u_connexion;
-                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" href="index.php?action=create&controller=utilisateur" >Inscription</a></nav></div>';
+                    echo '<a class="mdl-navigation__link mdl-typography--text-uppercase" style="color: white;" href="index.php?action=create&controller=utilisateur" >Inscription</a></nav></div>';
                     
                 }
                 echo

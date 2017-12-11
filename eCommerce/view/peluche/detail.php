@@ -41,7 +41,7 @@ echo '<li class="mdl-list__item">
 ?>
 <form method="get" action="index.php">
     <fieldset>
-        <legend><?php echo $html_legend; ?> : </legend>
+        <li class="mdl-list__item"><?php echo $html_legend; ?> : </li>
         <input type='hidden' name='action' value='add'>
         <input type='hidden' name='controller' value='panier'>
         <input type='hidden' name='idp' value=<?php echo $p_idp; ?> >

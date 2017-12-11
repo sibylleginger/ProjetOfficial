@@ -44,7 +44,7 @@ foreach ($tab_p as $p) {
 	  		<div class="mdl-card__supporting-text">'. $pDes .'</div>
 	  		<div class="mdl-card__actions mdl-card--border">
 	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=read&idp='. $purlId . '"> Voir les détails</a>
-	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=add&controller=panier&idp='.$purlId.'&qte=1=">Ajouter au panier</a>
+	    		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="index.php?action=add&controller=panier&idp='.$purlId.'&qte=1">Ajouter au panier</a>
 	  		</div>
 		</div> ';
 }
